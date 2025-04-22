@@ -40,12 +40,6 @@ cd server
 npm install
 ```
 
-Crie um arquivo `.env` na pasta `server` com:
-```env
-SUPABASE_URL=sua_url_do_supabase
-SUPABASE_ANON_KEY=sua_chave_anon_do_supabase
-```
-
 ### 3. Configuração do Frontend
 ```bash
 # Navegue até a pasta do cliente

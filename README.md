@@ -49,12 +49,26 @@ cd client
 npm install
 ```
 
-Crie um arquivo `.env` na pasta `client` com:
-```env
-REACT_APP_SUPABASE_URL=sua_url_do_supabase
-REACT_APP_SUPABASE_ANON_KEY=sua_chave_anon_do_supabase
+## 🚀 Executando o Projeto
+
+1. **Inicie o Servidor**
+```bash
+cd server
+npm run dev
 ```
 
+2. **Inicie o Cliente** (em outro terminal)
+```bash
+cd client
+npm run dev
+```
+
+3. Acesse a aplicação em `http://localhost:3000`
+
+
+
+
+#PENSAR MUITO BEM ANTES DE EXECUTAR OS SEGUINTES COMANDOS
 ## 🗄️ Configuração do Banco de Dados
 
 Execute no SQL Editor do Supabase:
@@ -129,21 +143,7 @@ using (
 );
 ```
 
-## 🚀 Executando o Projeto
 
-1. **Inicie o Servidor**
-```bash
-cd server
-npm run dev
-```
-
-2. **Inicie o Cliente** (em outro terminal)
-```bash
-cd client
-npm run dev
-```
-
-3. Acesse a aplicação em `http://localhost:3000`
 
 ## 👥 Criando Usuários
 

@@ -101,8 +101,12 @@ function TicketItem({ ticket, isStaff, staff = [] }) {
 
   const assignedStaffEmail = useMemo(() => {
     if (!currentAssignee) return 'Unassigned';
+    
+    // Find assigned staff member in the staff array
     const assignedStaff = staff.find(s => s.id === currentAssignee);
-    return assignedStaff?.email || 'Staff member';
+    
+    // Return email if found, otherwise show a partial ID
+    return assignedStaff?.email || `Staff (${currentAssignee.substring(0,8)}...)`;
   }, [currentAssignee, staff]);
 
   return (

@@ -37,8 +37,8 @@ function TicketDetails() {
           .from('tickets')
           .select(`
             *,
-            user:user_id (*),
-            assigned_staff:assigned_to (*)
+            user:user_id (id, email, role),
+            assigned_staff:assigned_to (id, email, role)
           `)
           .eq('id', id)
           .single();
@@ -66,7 +66,7 @@ function TicketDetails() {
         if (validUserIds.length > 0) { // Only query if there are valid IDs
           const { data: userData, error: userError } = await supabase
             .from('users')
-            .select('id, role')
+            .select('id, role, email')
             .in('id', validUserIds); // Use the filtered array
           
           if (userError) {
@@ -233,7 +233,7 @@ function TicketDetails() {
       <PageContainer title="Ticket Not Found">
         <div className="text-center py-12">
           <svg className="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2h-5.586a1 1 0 01-.707-.293l-5.414-5.414a1 1 0 01-.293-.707V5a2 2 0 012-2H15a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
           </svg>
           <h2 className="mt-2 text-lg font-medium text-gray-900">Ticket not found</h2>
           <p className="mt-1 text-gray-500">The requested ticket does not exist or you don't have permission to view it.</p>
@@ -296,7 +296,12 @@ function TicketDetails() {
             <div>
               <dt className="text-sm font-medium text-gray-500">Assigned to</dt>
               <dd className="mt-1 text-gray-900">
-                {ticket.assigned_staff ? ticket.assigned_staff.email || 'Staff member' : 'Unassigned'}
+                {ticket.assigned_to ? (
+                  // If assigned_to exists but the assigned_staff object is empty or email is missing
+                  ticket.assigned_staff?.email || `Staff (${ticket.assigned_to.substring(0,8)}...)`
+                ) : (
+                  'Unassigned'
+                )}
               </dd>
             </div>
             
@@ -334,7 +339,14 @@ function TicketDetails() {
                       </div>
                       <div className="min-w-0 flex-1">
                         <p className="text-sm font-medium text-gray-900">
-                          {users[comment.user_id]?.role === 'staff' ? 'Staff' : 'You'} 
+                          {users[comment.user_id]?.email || 'Unknown user'}
+                          <span className={`ml-1.5 inline-flex items-center px-1.5 py-0.5 rounded-full text-xs font-medium ${
+                            users[comment.user_id]?.role === 'staff' 
+                              ? 'bg-blue-100 text-blue-800' 
+                              : 'bg-gray-100 text-gray-800'
+                          }`}>
+                            {users[comment.user_id]?.role === 'staff' ? 'Staff' : 'Customer'}
+                          </span>
                           <span className="text-sm font-normal text-gray-500 ml-2">
                             {formatDate(comment.created_at)}
                           </span>

@@ -10,9 +10,13 @@ function TicketList() {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
+    // Create a variable to track if the component is still mounted
+    let isMounted = true;
+    
     async function fetchData() {
       try {
         setIsLoading(true);
+        
         // Get tickets with user information
         const { data: ticketsData, error: ticketsError } = await supabase
           .from('tickets')
@@ -20,55 +24,48 @@ function TicketList() {
             *,
             user:user_id (
               id,
-              role
+              role,
+              email
+            ),
+            assigned_staff:assigned_to (
+              id,
+              role,
+              email
             )
           `);
 
         if (ticketsError) throw ticketsError;
-        setTickets(ticketsData || []);
+        if (isMounted) setTickets(ticketsData || []);
 
-        // Try fetching staff using RPC first
+        // Skip the RPC attempt and go directly to the working query
         const { data: staffData, error: staffError } = await supabase
-          .rpc('get_staff_users');
+          .from('users')
+          .select(`
+            id,
+            role,
+            email
+          `)
+          .eq('role', 'staff');
 
-        if (staffError) {
-          // Log the error but don't necessarily throw, maybe staff
-          console.log('Falling back to direct query');
-          // Fallback query if the RPC doesn't exist
-          const { data: fallbackStaffData, error: fallbackError } = await supabase
-            .from('users')
-            .select(`
-              id,
-              role
-            `)
-            .eq('role', 'staff');
-
-          if (fallbackError) throw fallbackError;
-          
-          // Get emails for staff users
-          const staffWithEmails = await Promise.all(
-            (fallbackStaffData || []).map(async (staffMember) => {
-              const { data: userData } = await supabase.auth.admin.getUserById(staffMember.id);
-              return {
-                ...staffMember,
-                email: userData?.email || 'No email found'
-              };
-            })
-          );
-          
-          setStaff(staffWithEmails);
-        } else {
+        if (staffError) throw staffError;
+        if (isMounted) {
           setStaff(staffData || []);
+          console.log('Staff data loaded:', staffData);
         }
       } catch (err) {
         console.error('Error fetching data:', err);
-        setError(err.message);
+        if (isMounted) setError(err.message);
       } finally {
-        setIsLoading(false);
+        if (isMounted) setIsLoading(false);
       }
     }
 
     fetchData();
+    
+    // Cleanup function to prevent state updates on unmounted component
+    return () => {
+      isMounted = false;
+    };
   }, []);
 
   const filteredTickets = tickets.filter(ticket =>

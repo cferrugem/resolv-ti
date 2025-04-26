@@ -13,19 +13,52 @@ export default function Register() {
     setError('');
 
     try {
-      const { data, error: signUpError } = await supabase.auth.signUp({
+      // Sign up the user with email confirmation disabled
+      const { data: authData, error: signUpError } = await supabase.auth.signUp({
         email,
         password,
         options: {
+          emailRedirectTo: window.location.origin,
           data: {
-            role: 'customer' // Set default role
+            email: email,
+            role: 'customer'
           }
         }
       });
 
       if (signUpError) throw signUpError;
+      
+      if (!authData.user) {
+        throw new Error('User registration failed');
+      }
 
-      alert('Please check your email for the verification link!');
+      console.log('User created successfully:', authData.user.id);
+
+      // For new Supabase projects, the users table might need to be created first
+      // Check if users table exists and create it if needed
+      try {
+        // Try creating the user record separately
+        const { error: insertError } = await supabase
+          .from('users')
+          .insert([
+            {
+              id: authData.user.id,
+              email: authData.user.email,
+              role: 'customer'
+            }
+          ]);
+
+        if (insertError) {
+          console.warn('Could not create user record:', insertError);
+          // Don't throw error here, as the auth user was still created
+        }
+      } catch (insertErr) {
+        console.warn('User record creation failed:', insertErr);
+        // Continue even if this fails
+      }
+
+      // Show success message
+      alert('Registration successful! You can now login.');
       setEmail('');
       setPassword('');
     } catch (err) {

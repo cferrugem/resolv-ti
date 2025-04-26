@@ -67,6 +67,16 @@ npm run dev
 
 
 
+## Transformar usuário em super usuário - Início
+
+SELECT id, email FROM auth.users;
+
+
+UPDATE users 
+SET role = 'staff' 
+WHERE id = 'id';
+## Transformar usuário em super usuário - Fim
+
 
 #PENSAR MUITO BEM ANTES DE EXECUTAR OS SEGUINTES COMANDOS
 ## 🗄️ Configuração do Banco de Dados

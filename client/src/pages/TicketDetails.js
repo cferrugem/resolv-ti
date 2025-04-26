@@ -1,4 +1,4 @@
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useNavigate } from 'react-router-dom';
 import { supabase } from '../supabase';
 import { useState, useEffect, useRef } from 'react';
 import { useAuth } from '../AuthContext';
@@ -25,6 +25,7 @@ function TicketDetails() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState(null);
   const commentRef = useRef(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     async function fetchTicketData() {
@@ -160,6 +161,36 @@ function TicketDetails() {
       setError(`Failed to add comment: ${err.message}`);
     } finally {
       setIsSubmitting(false);
+    }
+  };
+
+  const handleDeleteTicket = async () => {
+    if (!window.confirm('Are you sure you want to delete this ticket? This action cannot be undone.')) {
+      return;
+    }
+
+    try {
+      // First delete all comments
+      const { error: commentsError } = await supabase
+        .from('ticket_comments')
+        .delete()
+        .eq('ticket_id', ticket.id);
+
+      if (commentsError) throw commentsError;
+
+      // Then delete the ticket
+      const { error: ticketError } = await supabase
+        .from('tickets')
+        .delete()
+        .eq('id', ticket.id);
+
+      if (ticketError) throw ticketError;
+
+      // Redirect to tickets list
+      navigate('/tickets');
+    } catch (err) {
+      console.error('Error deleting ticket:', err);
+      setError('Failed to delete ticket: ' + err.message);
     }
   };
 
@@ -358,6 +389,14 @@ function TicketDetails() {
           </div>
         </div>
       </div>
+      {role === 'staff' && (
+  <button
+    onClick={handleDeleteTicket}
+    className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
+  >
+    Delete Ticket
+  </button>
+)}
     </PageContainer>
   );
 }

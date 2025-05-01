@@ -22,12 +22,12 @@ function NavBar() {
                   <NavLink className={({ isActive }) =>
                     `${isActive ? 'border-primary-500 text-gray-900' : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700'} inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium transition-colors duration-200`
                   } to="/dashboard">
-                    Dashboard
+                    Painel
                   </NavLink>
                   <NavLink className={({ isActive }) =>
                     `${isActive ? 'border-primary-500 text-gray-900' : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700'} inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium transition-colors duration-200`
                   } to="/tickets">
-                    All Tickets
+                    Todos os Chamados
                   </NavLink>
                 </>
               ) : (
@@ -35,12 +35,12 @@ function NavBar() {
                   <NavLink className={({ isActive }) =>
                     `${isActive ? 'border-primary-500 text-gray-900' : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700'} inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium transition-colors duration-200`
                   } to="/my-tickets">
-                    My Tickets
+                    Meus Chamados
                   </NavLink>
                   <NavLink className={({ isActive }) =>
                     `${isActive ? 'border-primary-500 text-gray-900' : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700'} inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium transition-colors duration-200`
                   } to="/create-ticket">
-                    Create Ticket
+                    Criar Chamado
                   </NavLink>
                 </>
               )}
@@ -54,16 +54,16 @@ function NavBar() {
                   onClick={() => supabase.auth.signOut()} 
                   className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-primary-600 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 transition-colors duration-200"
                 >
-                  Logout
+                  Sair
                 </button>
               </div>
             ) : (
               <div className="space-x-4">
                 <Link to="/login" className="text-primary-600 hover:text-primary-700">
-                  Login
+                  Entrar
                 </Link>
                 <Link to="/register" className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-primary-600 hover:bg-primary-700">
-                  Register
+                  Registrar
                 </Link>
               </div>
             )}

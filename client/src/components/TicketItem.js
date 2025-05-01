@@ -127,15 +127,16 @@ function TicketItem({ ticket, isStaff, staff = [] }) {
               currentStatus === 'closed' ? 'bg-green-100 text-green-800 border-green-300' :
               'bg-gray-100 text-gray-800 border-gray-300' // Default/fallback style
             }`}>
-              {/* Icons for status */}
               {currentStatus === 'open' && <svg className="w-3 h-3 mr-1.5" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.414-1.414L11 10.586V6z" clipRule="evenodd" /></svg>}
               {currentStatus === 'in progress' && <svg className="w-3 h-3 mr-1.5 animate-spin-slow" fill="currentColor" viewBox="0 0 20 20"><path d="M10 3.5a1.5 1.5 0 013 0V5a1 1 0 01-2 0V3.5zM10 15a1.5 1.5 0 013 0v1.5a1 1 0 11-2 0V15zm-5-1.5a1.5 1.5 0 000 3H6a1 1 0 100-2H5zm11.5 0a1.5 1.5 0 000 3H18a1 1 0 100-2h-1.5zM5 6.5a1.5 1.5 0 010-3H3.5a1 1 0 000 2H5zm11.5 0a1.5 1.5 0 010-3H15a1 1 0 100 2h1.5z" /></svg>}
               {currentStatus === 'closed' && <svg className="w-3 h-3 mr-1.5" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" /></svg>}
-              {/* Capitalize status */}
-              {currentStatus.charAt(0).toUpperCase() + currentStatus.slice(1)}
+              {/* Status translation */}
+              {currentStatus === 'open' ? 'Aberto' : 
+               currentStatus === 'in progress' ? 'Em Andamento' : 
+               currentStatus === 'closed' ? 'Fechado' : currentStatus}
             </span>
             <Link to={`/ticket/${ticket.id}`} className="text-blue-600 hover:text-blue-800 font-medium">
-              View Details →
+              Ver Detalhes →
             </Link>
           </div>
         </div>
@@ -147,9 +148,9 @@ function TicketItem({ ticket, isStaff, staff = [] }) {
               disabled={isUpdating}
               className="block w-full px-3 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md disabled:opacity-50"
             >
-              <option value="open">Open</option>
-              <option value="in progress">In Progress</option>
-              <option value="closed">Closed</option>
+              <option value="open">Aberto</option>
+              <option value="in progress">Em Andamento</option>
+              <option value="closed">Fechado</option>
             </select>
             <div className="relative">
               <select 
@@ -158,15 +159,15 @@ function TicketItem({ ticket, isStaff, staff = [] }) {
                 disabled={isUpdating}
                 className="block w-full px-3 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md disabled:opacity-50"
               >
-                <option value="">Unassigned</option>
+                <option value="">Não Atribuído</option>
                 {staff.map(staffMember => (
                   <option key={staffMember.id} value={staffMember.id}>
-                    {staffMember.email || 'Loading...'}
+                    {staffMember.email || 'Carregando...'}
                   </option>
                 ))}
               </select>
               <div className="mt-1 text-sm text-gray-500">
-                Currently assigned to: {assignedStaffEmail}
+                Atualmente atribuído para: {assignedStaffEmail === 'Unassigned' ? 'Não Atribuído' : assignedStaffEmail}
               </div>
             </div>
           </div>

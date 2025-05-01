@@ -6,9 +6,9 @@ import PageContainer from '../components/PageContainer';
 
 // Helper to format dates
 const formatDate = (dateString) => {
-  if (!dateString) return 'Unknown date';
+  if (!dateString) return 'Data desconhecida';
   const date = new Date(dateString);
-  return new Intl.DateTimeFormat('en-US', {
+  return new Intl.DateTimeFormat('pt-BR', {
     dateStyle: 'medium',
     timeStyle: 'short'
   }).format(date);
@@ -194,19 +194,13 @@ function TicketDetails() {
     }
   };
 
-  if (isLoading) {
-    return (
-      <PageContainer title="Loading Ticket...">
+  return (
+    <PageContainer title="Detalhes do Chamado">
+      {isLoading ? (
         <div className="flex justify-center items-center h-64">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500"></div>
         </div>
-      </PageContainer>
-    );
-  }
-
-  if (error) {
-    return (
-      <PageContainer title="Ticket Details">
+      ) : error ? (
         <div className="bg-red-50 border-l-4 border-red-400 p-4 rounded-md">
           <div className="flex">
             <div className="flex-shrink-0">
@@ -217,198 +211,276 @@ function TicketDetails() {
             <div className="ml-3">
               <p className="text-sm text-red-700">{error}</p>
               <p className="mt-2 text-sm">
-                <Link to="/my-tickets" className="text-red-700 font-medium underline">
-                  Go back to tickets
-                </Link>
+                Por favor, tente novamente ou contate o suporte.
               </p>
             </div>
           </div>
         </div>
-      </PageContainer>
-    );
-  }
-
-  if (!ticket) {
-    return (
-      <PageContainer title="Ticket Not Found">
+      ) : !ticket ? (
         <div className="text-center py-12">
           <svg className="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2h-5.586a1 1 0 01-.707-.293l-5.414-5.414a1 1 0 01-.293-.707V5a2 2 0 012-2H15a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
           </svg>
-          <h2 className="mt-2 text-lg font-medium text-gray-900">Ticket not found</h2>
-          <p className="mt-1 text-gray-500">The requested ticket does not exist or you don't have permission to view it.</p>
+          <h3 className="mt-2 text-sm font-medium text-gray-900">Chamado não encontrado</h3>
+          <p className="mt-1 text-sm text-gray-500">O chamado solicitado não existe ou foi removido.</p>
           <div className="mt-6">
-            <Link to="/my-tickets" className="text-blue-600 hover:text-blue-800 font-medium">
-              Go back to tickets
+            <Link to="/my-tickets" className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+              Voltar para Meus Chamados
             </Link>
           </div>
         </div>
-      </PageContainer>
-    );
-  }
-
-  return (
-    <PageContainer title={`Ticket: ${ticket.title}`}>
-      <div className="bg-white overflow-hidden shadow rounded-lg divide-y divide-gray-200">
-        {/* Ticket header */}
-        <div className="px-4 py-5 sm:px-6">
-          <div className="flex justify-between items-start">
-            <div>
-              <h3 className="text-lg leading-6 font-medium text-gray-900">{ticket.title}</h3>
-              <p className="mt-1 max-w-2xl text-sm text-gray-500">
-                Created {formatDate(ticket.created_at)}
-              </p>
-            </div>
-            <div className="flex flex-col items-end">
-              <span className={`inline-flex items-center px-3 py-0.5 rounded-full text-sm font-medium border ${
-                ticket.status === 'open' ? 'bg-yellow-100 text-yellow-800 border-yellow-300' :
-                ticket.status === 'in progress' ? 'bg-blue-100 text-blue-800 border-blue-300' :
-                ticket.status === 'closed' ? 'bg-green-100 text-green-800 border-green-300' :
-                'bg-gray-100 text-gray-800 border-gray-300' // Default/fallback style
-              }`}>
-                {/* Icons for status */}
-                {ticket.status === 'open' && <svg className="w-3 h-3 mr-1.5" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.414-1.414L11 10.586V6z" clipRule="evenodd" /></svg>}
-                {ticket.status === 'in progress' && <svg className="w-3 h-3 mr-1.5 animate-spin-slow" fill="currentColor" viewBox="0 0 20 20"><path d="M10 3.5a1.5 1.5 0 013 0V5a1 1 0 01-2 0V3.5zM10 15a1.5 1.5 0 013 0v1.5a1 1 0 11-2 0V15zm-5-1.5a1.5 1.5 0 000 3H6a1 1 0 100-2H5zm11.5 0a1.5 1.5 0 000 3H18a1 1 0 100-2h-1.5zM5 6.5a1.5 1.5 0 010-3H3.5a1 1 0 000 2H5zm11.5 0a1.5 1.5 0 010-3H15a1 1 0 100 2h1.5z" /></svg>}
-                {ticket.status === 'closed' && <svg className="w-3 h-3 mr-1.5" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" /></svg>}
-                {/* Capitalize status */}
-                {ticket.status.charAt(0).toUpperCase() + ticket.status.slice(1)}
-              </span>
-              <span className="mt-1 text-sm text-gray-500">
-                Priority: <span className="font-medium">{ticket.priority}</span>
-              </span>
-            </div>
-          </div>
-        </div>
-
-        {/* Ticket details */}
-        <div className="px-4 py-5 sm:p-6">
-          <dl className="grid grid-cols-1 gap-x-4 gap-y-8 sm:grid-cols-2">
-            <div className="sm:col-span-2">
-              <dt className="text-sm font-medium text-gray-500">Description</dt>
-              <dd className="mt-1 text-gray-900 whitespace-pre-line">{ticket.description}</dd>
-            </div>
-            
-            <div>
-              <dt className="text-sm font-medium text-gray-500">Submitted by</dt>
-              <dd className="mt-1 text-gray-900">{user.email}</dd>
-            </div>
-            
-            <div>
-              <dt className="text-sm font-medium text-gray-500">Assigned to</dt>
-              <dd className="mt-1 text-gray-900">
-                {ticket.assigned_to ? (
-                  // If assigned_to exists but the assigned_staff object is empty or email is missing
-                  ticket.assigned_staff?.email || `Staff (${ticket.assigned_to.substring(0,8)}...)`
-                ) : (
-                  'Unassigned'
-                )}
-              </dd>
-            </div>
-            
-            <div>
-              <dt className="text-sm font-medium text-gray-500">Last updated</dt>
-              <dd className="mt-1 text-gray-900">{formatDate(ticket.updated_at)}</dd>
-            </div>
-          </dl>
-        </div>
-
-        {/* Comments section */}
-        <div className="px-4 py-5 sm:p-6">
-          <h3 className="text-lg leading-6 font-medium text-gray-900 mb-4">Comments</h3>
-          
-          {comments.length === 0 ? (
-            <div className="text-center py-8 bg-gray-50 rounded-lg">
-              <svg className="mx-auto h-10 w-10 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
-              </svg>
-              <p className="mt-2 text-sm text-gray-500">No comments yet.</p>
-            </div>
-          ) : (
-            <div className="flow-root">
-              <ul className="space-y-4">
-                {comments.map((comment, index) => (
-                  <li key={comment.id} className={`${index === comments.length - 1 ? 'pb-0' : 'border-b border-gray-200 pb-4'}`}>
-                    <div className="flex space-x-3">
-                      <div className="flex-shrink-0">
-                        <div className={`h-8 w-8 rounded-full flex items-center justify-center ${
-                          users[comment.user_id]?.role === 'staff' ? 
-                          'bg-blue-100 text-blue-800' : 'bg-gray-100 text-gray-700'
-                        }`}>
-                          {users[comment.user_id]?.role === 'staff' ? 'S' : 'U'}
-                        </div>
-                      </div>
-                      <div className="min-w-0 flex-1">
-                        <p className="text-sm font-medium text-gray-900">
-                          {users[comment.user_id]?.email || 'Unknown user'}
-                          <span className={`ml-1.5 inline-flex items-center px-1.5 py-0.5 rounded-full text-xs font-medium ${
-                            users[comment.user_id]?.role === 'staff' 
-                              ? 'bg-blue-100 text-blue-800' 
-                              : 'bg-gray-100 text-gray-800'
-                          }`}>
-                            {users[comment.user_id]?.role === 'staff' ? 'Staff' : 'Customer'}
-                          </span>
-                          <span className="text-sm font-normal text-gray-500 ml-2">
-                            {formatDate(comment.created_at)}
-                          </span>
-                        </p>
-                        <div className="mt-1 text-sm text-gray-700 whitespace-pre-line">
-                          {comment.comment}
-                        </div>
-                      </div>
-                    </div>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          )}
-          
-          {/* Add comment form */}
-          <div className="mt-6" ref={commentRef}>
-            <form onSubmit={handleAddComment}>
-              <div className="mb-2">
-                <label htmlFor="comment" className="block text-sm font-medium text-gray-700">Add a comment</label>
-                <textarea
-                  id="comment"
-                  name="comment"
-                  rows={3}
-                  value={newComment}
-                  onChange={(e) => setNewComment(e.target.value)}
-                  className="shadow-sm block w-full focus:ring-blue-500 focus:border-blue-500 sm:text-sm border border-gray-300 rounded-md"
-                  placeholder="Type your comment here..."
-                  required
-                />
-              </div>
-              <div className="flex justify-end">
-                <button
-                  type="submit"
-                  disabled={isSubmitting || !newComment.trim()}
-                  className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
-                >
-                  {isSubmitting ? (
-                    <>
-                      <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+      ) : (
+        <div className="bg-white overflow-hidden shadow-lg rounded-lg">
+          {/* Cabeçalho do chamado */}
+          <div className="bg-gray-50 border-b border-gray-200">
+            <div className="px-6 py-5 flex flex-col md:flex-row md:items-center md:justify-between">
+              <div className="flex-1 min-w-0">
+                <div className="flex items-center mb-1">
+                  <h2 className="text-2xl font-bold text-gray-900 mr-2">{ticket.title}</h2>
+                  <span className="text-sm text-gray-500">#{typeof ticket.id === 'string' ? ticket.id.substring(0, 8) : String(ticket.id).substring(0, 8)}</span>
+                </div>
+                <div className="flex flex-wrap items-center gap-2 mt-2">
+                  <span className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ${
+                    ticket.status === 'open' ? 'bg-yellow-100 text-yellow-800 border border-yellow-200' :
+                    ticket.status === 'in progress' ? 'bg-blue-100 text-blue-800 border border-blue-200' :
+                    'bg-green-100 text-green-800 border border-green-200'
+                  }`}>
+                    {ticket.status === 'open' && (
+                      <svg className="w-3 h-3 mr-1.5" fill="currentColor" viewBox="0 0 20 20">
+                        <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.414-1.414L11 10.586V6z" clipRule="evenodd" />
                       </svg>
-                      Posting...
-                    </>
-                  ) : (
-                    'Post Comment'
-                  )}
-                </button>
+                    )}
+                    {ticket.status === 'in progress' && (
+                      <svg className="w-3 h-3 mr-1.5 animate-spin-slow" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M10 3.5a1.5 1.5 0 013 0V5a1 1 0 01-2 0V3.5zM10 15a1.5 1.5 0 013 0v1.5a1 1 0 11-2 0V15zm-5-1.5a1.5 1.5 0 000 3H6a1 1 0 100-2H5zm11.5 0a1.5 1.5 0 000 3H18a1 1 0 100-2h-1.5zM5 6.5a1.5 1.5 0 01-3 0V5a1 1 0 012 0v1.5zm0 8a1.5 1.5 0 01-3 0v-1.5a1 1 0 112 0V15zm13-7a1.5 1.5 0 00-3 0V6a1 1 0 01-2 0V4.5a1.5 1.5 0 013 0V6a1 1 0 11-2 0V4.5zM18 7.5a1.5 1.5 0 00-3 0V9a1 1 0 11-2 0V7.5a1.5 1.5 0 113 0V9a1 1 0 11-2 0V7.5z" />
+                      </svg>
+                    )}
+                    {ticket.status === 'closed' && (
+                      <svg className="w-3 h-3 mr-1.5" fill="currentColor" viewBox="0 0 20 20">
+                        <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                      </svg>
+                    )}
+                    {ticket.status === 'open' ? 'Aberto' : 
+                     ticket.status === 'in progress' ? 'Em Andamento' : 'Fechado'}
+                  </span>
+                  <span className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ${
+                    ticket.priority === 'high' ? 'bg-red-100 text-red-800 border border-red-200' :
+                    ticket.priority === 'medium' ? 'bg-yellow-100 text-yellow-800 border border-yellow-200' :
+                    'bg-green-100 text-green-800 border border-green-200'
+                  }`}>
+                    <span className={`mr-1.5 h-2.5 w-2.5 rounded-full ${
+                      ticket.priority === 'high' ? 'bg-red-500' :
+                      ticket.priority === 'medium' ? 'bg-yellow-500' : 'bg-green-500'
+                    }`}></span>
+                    Prioridade: {ticket.priority === 'high' ? 'Alta' : 
+                                 ticket.priority === 'medium' ? 'Média' : 'Baixa'}
+                  </span>
+                  <span className="text-sm text-gray-500">
+                    Criado em {formatDate(ticket.created_at)}
+                  </span>
+                </div>
               </div>
-            </form>
+              
+              {role === 'staff' && (
+                <div className="flex mt-4 md:mt-0">
+                  <button
+                    onClick={handleDeleteTicket}
+                    className="inline-flex items-center px-3 py-1.5 border border-transparent text-sm font-medium rounded-md text-red-700 bg-red-100 hover:bg-red-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
+                  >
+                    <svg className="-ml-0.5 mr-1 h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                    </svg>
+                    Excluir Chamado
+                  </button>
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* Grid de informações e descrição */}
+          <div className="grid grid-cols-1 lg:grid-cols-4 gap-0 lg:gap-6">
+            {/* Coluna principal - Descrição e comentários */}
+            <div className="lg:col-span-3 px-6 py-6">
+              <div className="mb-8">
+                <h3 className="text-lg font-medium text-gray-900 mb-3">Descrição</h3>
+                <div className="bg-gray-50 p-4 rounded-lg border border-gray-200">
+                  <p className="text-gray-900 whitespace-pre-line">{ticket.description}</p>
+                </div>
+              </div>
+              
+              {/* Seção de comentários */}
+              <div className="border-t border-gray-200 pt-6">
+                <h3 className="text-lg font-medium text-gray-900 mb-4 flex items-center">
+                  <svg className="mr-2 h-5 w-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
+                  </svg>
+                  Comentários
+                  {comments.length > 0 && (
+                    <span className="ml-2 text-sm bg-gray-100 text-gray-700 py-0.5 px-2 rounded-full">
+                      {comments.length}
+                    </span>
+                  )}
+                </h3>
+                
+                {comments.length === 0 ? (
+                  <div className="text-center py-6 bg-gray-50 rounded-lg border border-gray-200">
+                    <svg className="mx-auto h-10 w-10 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
+                    </svg>
+                    <p className="mt-2 text-sm text-gray-500">Nenhum comentário ainda.</p>
+                  </div>
+                ) : (
+                  <div className="flow-root">
+                    <ul className="space-y-4">
+                      {comments.map((comment, index) => (
+                        <li key={comment.id} className={`bg-gray-50 rounded-lg p-4 border ${
+                          users[comment.user_id]?.role === 'staff' 
+                            ? 'border-blue-200' 
+                            : 'border-gray-200'
+                        }`}>
+                          <div className="flex space-x-3">
+                            <div className="flex-shrink-0">
+                              <div className={`h-10 w-10 rounded-full flex items-center justify-center ${
+                                users[comment.user_id]?.role === 'staff' 
+                                ? 'bg-blue-100 text-blue-800' 
+                                : 'bg-gray-100 text-gray-700'
+                              }`}>
+                                {users[comment.user_id]?.role === 'staff' ? 'S' : 'U'}
+                              </div>
+                            </div>
+                            <div className="min-w-0 flex-1">
+                              <div className="flex justify-between items-center mb-1">
+                                <p className="text-sm font-medium text-gray-900">
+                                  {users[comment.user_id]?.email || 'Usuário desconhecido'}
+                                  <span className={`ml-1.5 inline-flex items-center px-1.5 py-0.5 rounded-full text-xs font-medium ${
+                                    users[comment.user_id]?.role === 'staff' 
+                                      ? 'bg-blue-100 text-blue-800' 
+                                      : 'bg-gray-100 text-gray-800'
+                                  }`}>
+                                    {users[comment.user_id]?.role === 'staff' ? 'Suporte' : 'Cliente'}
+                                  </span>
+                                </p>
+                                <span className="text-xs text-gray-500">
+                                  {formatDate(comment.created_at)}
+                                </span>
+                              </div>
+                              <div className="mt-2 text-sm text-gray-700 whitespace-pre-line border-l-2 border-gray-200 pl-3">
+                                {comment.comment}
+                              </div>
+                            </div>
+                          </div>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+                
+                {/* Formulário para adicionar comentário */}
+                <div className="mt-6 bg-white p-4 rounded-lg border border-gray-200" ref={commentRef}>
+                  <form onSubmit={handleAddComment}>
+                    <div className="mb-3">
+                      <label htmlFor="comment" className="block text-sm font-medium text-gray-700">Adicionar um comentário</label>
+                      <textarea
+                        id="comment"
+                        name="comment"
+                        rows={3}
+                        value={newComment}
+                        onChange={(e) => setNewComment(e.target.value)}
+                        className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                        placeholder="Digite seu comentário aqui..."
+                        required
+                      />
+                    </div>
+                    <div className="flex justify-end">
+                      <button
+                        type="submit"
+                        disabled={isSubmitting || !newComment.trim()}
+                        className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
+                      >
+                        {isSubmitting ? (
+                          <>
+                            <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                            </svg>
+                            Enviando...
+                          </>
+                        ) : (
+                          'Enviar Comentário'
+                        )}
+                      </button>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+            
+            {/* Coluna lateral - Informações do ticket */}
+            <div className="lg:col-span-1 bg-gray-50 lg:bg-white px-6 py-6 border-t lg:border-t-0 lg:border-l border-gray-200">
+              <div className="mb-6">
+                <h3 className="text-sm font-medium text-gray-500 uppercase tracking-wider mb-2">Informações</h3>
+                <div className="space-y-4">
+                  <div>
+                    <div className="text-xs text-gray-500 mb-1">Enviado por</div>
+                    <div className="flex items-center">
+                      <span className="inline-flex items-center justify-center h-8 w-8 rounded-full bg-gray-100 text-gray-700 mr-2">
+                        <span className="text-xs font-medium leading-none">
+                          {user?.email?.charAt(0).toUpperCase() || 'U'}
+                        </span>
+                      </span>
+                      <span className="text-sm font-medium text-gray-900">{user.email}</span>
+                    </div>
+                  </div>
+                  
+                  <div>
+                    <div className="text-xs text-gray-500 mb-1">Atribuído para</div>
+                    <div className="flex items-center">
+                      {ticket.assigned_to ? (
+                        <>
+                          <span className="inline-flex items-center justify-center h-8 w-8 rounded-full bg-blue-100 text-blue-700 mr-2">
+                            <span className="text-xs font-medium leading-none">
+                              {ticket.assigned_staff?.email?.charAt(0).toUpperCase() || 'S'}
+                            </span>
+                          </span>
+                          <span className="text-sm font-medium text-gray-900">
+                            {ticket.assigned_staff?.email || `Equipe (${ticket.assigned_to.substring(0,8)}...)`}
+                          </span>
+                        </>
+                      ) : (
+                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
+                          Não atribuído
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                  
+                  <div>
+                    <div className="text-xs text-gray-500 mb-1">Criado em</div>
+                    <div className="text-sm text-gray-900">{formatDate(ticket.created_at)}</div>
+                  </div>
+                  
+                  <div>
+                    <div className="text-xs text-gray-500 mb-1">Última atualização</div>
+                    <div className="text-sm text-gray-900">{formatDate(ticket.updated_at)}</div>
+                  </div>
+                </div>
+              </div>
+              
+              <div className="py-3 border-t border-gray-200">
+                <Link 
+                  to="/my-tickets" 
+                  className="inline-flex items-center text-sm text-blue-600 hover:text-blue-800"
+                >
+                  <svg className="h-4 w-4 mr-1" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                  </svg>
+                  Voltar para Meus Chamados
+                </Link>
+              </div>
+            </div>
           </div>
         </div>
-      </div>
-      {role === 'staff' && (
-  <button
-    onClick={handleDeleteTicket}
-    className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
-  >
-    Delete Ticket
-  </button>
-)}
+      )}
     </PageContainer>
   );
 }

@@ -540,9 +540,3 @@ Contribuições são bem-vindas! Para contribuir:
 * Adicione testes para novas funcionalidades.
 * Atualize a documentação conforme necessário.
 * Certifique-se de que todos os testes passam antes de enviar.
-
-## 📨 Suporte
-
-Para suporte ou dúvidas, crie uma issue no repositório ou envie um email para suporte@resolvti.com.br
-
-Desenvolvido com ❤️ para simplificar a gestão de suporte técnico

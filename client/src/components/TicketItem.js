@@ -1,13 +1,30 @@
 import { Link } from 'react-router-dom';
 import { supabase } from '../supabase';
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 
 function TicketItem({ ticket, isStaff, staff = [] }) {
   const [error, setError] = useState('');
   const [isUpdating, setIsUpdating] = useState(false);
   const [currentStatus, setCurrentStatus] = useState(ticket.status || 'open');
   const [currentAssignee, setCurrentAssignee] = useState(ticket.assigned_to || null);
+  const [categories, setCategories] = useState([]);
 
+  // Buscar categorias ao carregar o componente
+  useEffect(() => {
+    async function fetchCategories() {
+      try {
+        const response = await fetch('http://localhost:5000/api/tickets/categories');
+        if (!response.ok) throw new Error('Falha ao carregar categorias');
+        const data = await response.json();
+        setCategories(data);
+      } catch (err) {
+        console.error('Erro ao buscar categorias:', err);
+      }
+    }
+    
+    fetchCategories();
+  }, []);
+  
   const handleStatusChange = async (e) => {
     const newStatus = e.target.value;
     if (newStatus === currentStatus) return; // Skip if no change
@@ -109,6 +126,12 @@ function TicketItem({ ticket, isStaff, staff = [] }) {
     return assignedStaff?.email || `Staff (${currentAssignee.substring(0,8)}...)`;
   }, [currentAssignee, staff]);
 
+  // Encontrar o nome da categoria pelo ID
+  const getCategoryName = (categoryId) => {
+    const category = categories.find(c => c.id === categoryId);
+    return category ? category.name : categoryId;
+  };
+
   return (
     <div className="bg-white rounded-lg shadow-md p-6 mb-4 hover:shadow-lg transition-shadow">
       {error && (
@@ -172,6 +195,25 @@ function TicketItem({ ticket, isStaff, staff = [] }) {
             </div>
           </div>
         )}
+      </div>
+      <div className="px-4 py-4 sm:px-6">
+        <div className="mt-2 flex items-center text-sm text-gray-500">
+          <div className="flex-shrink-0">
+            <svg className="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 12h18M12 3v18" />
+            </svg>
+          </div>
+          <div className="ml-2">
+            <span className="font-medium text-gray-900">{new Date(ticket.created_at).toLocaleDateString()}</span> - Criado por {ticket.created_by}
+          </div>
+        </div>
+        
+        <div className="mt-2 flex items-center">
+          <svg className="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
+          </svg>
+          <span>{getCategoryName(ticket.category || 'outro')}</span>
+        </div>
       </div>
     </div>
   );

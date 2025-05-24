@@ -1,21 +1,41 @@
-import { useState } from 'react';
-import { supabase } from '../supabase';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../AuthContext';
+import { useAuth } from '../AuthContext';  // Corrigido o caminho de importação
+import { supabase } from '../supabase';
 
 export default function CreateTicket() {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [priority, setPriority] = useState('medium');
+  const [category, setCategory] = useState('hardware');
+  const [categories, setCategories] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
   const navigate = useNavigate();
   const { user } = useAuth();
 
+  // Buscar categorias disponíveis
+  useEffect(() => {
+    async function fetchCategories() {
+      try {
+        const response = await fetch('http://localhost:5000/api/tickets/categories');
+        if (!response.ok) throw new Error('Falha ao carregar categorias');
+        const data = await response.json();
+        setCategories(data);
+        if (data.length > 0) setCategory(data[0].id);
+      } catch (err) {
+        console.error('Erro ao buscar categorias:', err);
+        setError('Não foi possível carregar as categorias.');
+      }
+    }
+    
+    fetchCategories();
+  }, []);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!user) {
-      setError('You must be logged in to create a ticket');
+      setError('Você precisa estar logado para criar um chamado');
       return;
     }
 
@@ -27,7 +47,7 @@ export default function CreateTicket() {
       const { data: { session }, error: sessionError } = await supabase.auth.getSession();
       
       if (sessionError || !session) {
-        throw new Error('Authentication session not found');
+        throw new Error('Sessão de autenticação não encontrada');
       }
 
       // Create ticket
@@ -41,28 +61,30 @@ export default function CreateTicket() {
           title,
           description,
           priority,
+          category, // Incluir categoria no payload
         }),
       });
 
       // Check if response is JSON
       const contentType = response.headers.get('content-type');
       if (!contentType || !contentType.includes('application/json')) {
-        throw new Error('Server returned non-JSON response');
+        throw new Error('O servidor retornou uma resposta não-JSON');
       }
 
       const data = await response.json();
 
       if (!response.ok) {
-        throw new Error(data.error || 'Failed to create ticket');
+        throw new Error(data.error || 'Falha ao criar chamado');
       }
 
-      alert('Ticket created successfully!');
+      alert('Chamado criado com sucesso!');
       setTitle('');
       setDescription('');
       setPriority('medium');
+      setCategory('hardware');
       navigate('/my-tickets');
     } catch (err) {
-      console.error('Error creating ticket:', err);
+      console.error('Erro ao criar chamado:', err);
       setError(err.message);
     } finally {
       setIsLoading(false);
@@ -81,7 +103,7 @@ export default function CreateTicket() {
           <div className="flex">
             <div className="flex-shrink-0">
               <svg className="h-5 w-5 text-red-400" fill="currentColor" viewBox="0 0 20 20">
-                <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
+                <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-9v4a1 1 0 11-2 0v-4a1 1 0 112 0zm0-4a1 1 0 11-2 0 1 1 0 012 0z" clipRule="evenodd" />
               </svg>
             </div>
             <div className="ml-3">
@@ -90,7 +112,7 @@ export default function CreateTicket() {
           </div>
         </div>
       )}
-      
+
       <form onSubmit={handleSubmit} className="space-y-6">
         <div className="bg-gray-50 p-4 rounded-lg">
           <div className="mb-6">
@@ -123,6 +145,26 @@ export default function CreateTicket() {
               placeholder="Descreva seu problema em detalhes. Inclua passos para reproduzir o problema, mensagens de erro, e qualquer informação relevante."
             />
             <p className="mt-1 text-xs text-gray-500">Forneça o máximo de detalhes possível para agilizar a solução.</p>
+          </div>
+
+          {/* Campo de Categoria */}
+          <div className="mb-6">
+            <label htmlFor="category" className="block text-sm font-medium text-gray-700 mb-1">
+              Categoria <span className="text-red-500">*</span>
+            </label>
+            <select
+              id="category"
+              value={category}
+              onChange={(e) => setCategory(e.target.value)}
+              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
+            >
+              {categories.map((cat) => (
+                <option key={cat.id} value={cat.id}>
+                  {cat.name} - {cat.description}
+                </option>
+              ))}
+            </select>
+            <p className="mt-1 text-xs text-gray-500">Selecione a categoria que melhor descreve seu problema.</p>
           </div>
         </div>
 
@@ -191,14 +233,14 @@ export default function CreateTicket() {
             <button
               type="button"
               onClick={() => navigate(-1)}
-              className="mr-3 px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+              className="mr-3 px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
             >
               Cancelar
             </button>
             <button
               type="submit"
               disabled={isLoading}
-              className="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50"
+              className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50"
             >
               {isLoading ? (
                 <>

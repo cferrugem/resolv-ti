@@ -47,8 +47,13 @@ function Dashboard() {
   const [staffPerformance, setStaffPerformance] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [timeFrame, setTimeFrame] = useState('week');
+  const [categoryData, setCategoryData] = useState([]);
+  const [categoryChartData, setCategoryChartData] = useState({ labels: [], datasets: [] });
+  const [categories, setCategories] = useState([]);
 
   useEffect(() => {
+    let isMounted = true;
+    
     async function fetchDashboardData() {
       try {
         setIsLoading(true);
@@ -83,6 +88,12 @@ function Dashboard() {
         
         const startDateString = startDate.toISOString();
 
+        // Buscar as definições de categorias para exibir nomes amigáveis
+        const categoriesResponse = await fetch('http://localhost:5000/api/tickets/categories');
+        if (!categoriesResponse.ok) throw new Error('Falha ao buscar categorias');
+        const categoriesData = await categoriesResponse.json();
+        if (isMounted) setCategories(categoriesData);
+        
         // Buscar todos os dados de tickets
         const { data, error } = await supabase
           .from('tickets')
@@ -183,14 +194,84 @@ function Dashboard() {
           }))
           .sort((a, b) => b.efficiency - a.efficiency));
 
+        // Calcular métricas por categoria
+        const categoryCount = {};
+        
+        // Inicializar contadores para cada categoria
+        categoriesData.forEach(cat => {
+          categoryCount[cat.id] = 0;
+        });
+        
+        // Contar tickets por categoria
+        data.forEach(ticket => {
+          const ticketCategory = ticket.category || 'outro';
+          categoryCount[ticketCategory] = (categoryCount[ticketCategory] || 0) + 1;
+        });
+        
+        // Preparar dados para o gráfico
+        const categoryStats = Object.entries(categoryCount)
+          .map(([catId, count]) => {
+            const category = categoriesData.find(c => c.id === catId) || { name: catId, id: catId };
+            return {
+              id: catId,
+              name: category.name,
+              count
+            };
+          })
+          .sort((a, b) => b.count - a.count);
+
+        if (isMounted) setCategoryData(categoryStats);
+
+        // Criar dados para o gráfico de categorias
+        const categoryChart = {
+          labels: categoryStats.map(cat => cat.name),
+          datasets: [
+            {
+              label: 'Chamados por Categoria',
+              data: categoryStats.map(cat => cat.count),
+              backgroundColor: [
+                'rgba(255, 99, 132, 0.7)',
+                'rgba(54, 162, 235, 0.7)',
+                'rgba(255, 206, 86, 0.7)',
+                'rgba(75, 192, 192, 0.7)',
+                'rgba(153, 102, 255, 0.7)',
+                'rgba(255, 159, 64, 0.7)',
+                'rgba(199, 199, 199, 0.7)',
+                'rgba(83, 102, 255, 0.7)',
+                'rgba(255, 99, 255, 0.7)',
+                'rgba(255, 159, 144, 0.7)'
+              ],
+              borderColor: [
+                'rgb(255, 99, 132)',
+                'rgb(54, 162, 235)',
+                'rgb(255, 206, 86)',
+                'rgb(75, 192, 192)',
+                'rgb(153, 102, 255)',
+                'rgb(255, 159, 64)',
+                'rgb(199, 199, 199)',
+                'rgb(83, 102, 255)',
+                'rgb(255, 99, 255)',
+                'rgb(255, 159, 144)'
+              ],
+              borderWidth: 1
+            }
+          ]
+        };
+        
+        if (isMounted) setCategoryChartData(categoryChart);
+
       } catch (err) {
         console.error('Erro ao buscar dados do dashboard:', err);
       } finally {
-        setIsLoading(false);
+        if (isMounted) setIsLoading(false);
       }
     }
 
     fetchDashboardData();
+    
+    return () => {
+      isMounted = false;
+    };
   }, [user, role, navigate, timeFrame]);
 
   // Dados para gráfico de status
@@ -399,13 +480,32 @@ function Dashboard() {
             </div>
           </div>
         </div>
+
+        {/* Nova Card - Categoria mais frequente */}
+        <div className="bg-white overflow-hidden shadow-lg rounded-lg border-l-4 border-indigo-500 transition-transform hover:scale-105">
+          <div className="p-5">
+            <div className="flex items-center">
+              <div className="flex-shrink-0 bg-indigo-500 rounded-md p-3">
+                <svg className="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
+                </svg>
+              </div>
+              <div className="ml-5 w-0 flex-1">
+                <dt className="text-sm font-medium text-gray-500 truncate">Categoria Principal</dt>
+                <dd className="text-3xl font-semibold text-gray-900">
+                  {categoryData.length > 0 ? categoryData[0].name : "N/A"}
+                </dd>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
 
       {/* Grid de Gráficos */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
         {/* Gráfico de Tendências */}
         <div className="bg-white p-6 rounded-lg shadow-lg">
-          <h3 className="text-lg font-medium text-gray-900 mb-4">Tendências de Tickets</h3>
+          <h3 className="text-lg font-medium text-gray-900 mb-4">Tendências de Chamados</h3>
           <div className="h-64">
             <Line data={trendChartData} options={{ 
               maintainAspectRatio: false,
@@ -449,22 +549,29 @@ function Dashboard() {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-1 gap-6 mb-8">
-        {/* Desempenho da Equipe */}
+      {/* Nova seção para Categorias */}
+      <div className="grid grid-cols-1 gap-6 mb-8">
+        {/* Gráfico de Distribuição por Categorias */}
         <div className="bg-white p-6 rounded-lg shadow-lg">
-          <h3 className="text-lg font-medium text-gray-900 mb-4">Desempenho da Equipe</h3>
-          <div className="h-64">
-            <Bar data={staffChartData} options={{ 
+          <h3 className="text-lg font-medium text-gray-900 mb-4">Distribuição por Categorias</h3>
+          <p className="text-sm text-gray-500 mb-4">
+            Visualize a distribuição dos chamados por tipo de problema para identificar áreas que precisam de mais atenção.
+          </p>
+          <div className="h-80">
+            <Bar data={categoryChartData} options={{ 
               maintainAspectRatio: false,
               plugins: {
                 legend: {
-                  position: 'top',
+                  display: false
                 },
                 tooltip: {
                   callbacks: {
-                    afterBody: function(context) {
-                      const index = context[0].dataIndex;
-                      return `Eficiência: ${staffPerformance[index].efficiency}%`;
+                    label: function(context) {
+                      const label = context.dataset.label || '';
+                      const value = context.raw || 0;
+                      const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                      const percentage = Math.round((value / total) * 100);
+                      return `${label}: ${value} (${percentage}%)`;
                     }
                   }
                 }
@@ -475,6 +582,13 @@ function Dashboard() {
                   ticks: {
                     precision: 0
                   }
+                },
+                x: {
+                  ticks: {
+                    autoSkip: false,
+                    maxRotation: 45,
+                    minRotation: 45
+                  }
                 }
               }
             }} />
@@ -482,94 +596,76 @@ function Dashboard() {
         </div>
       </div>
 
-      {/* Grid Inferior */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Principais Usuários */}
+      {/* Grid de Estatísticas com Card de Categoria */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+        {/* Cards existentes... */}
+
+        {/* Nova Card - Categoria mais frequente */}
+        <div className="bg-white overflow-hidden shadow-lg rounded-lg border-l-4 border-indigo-500 transition-transform hover:scale-105">
+          <div className="p-5">
+            <div className="flex items-center">
+              <div className="flex-shrink-0 bg-indigo-500 rounded-md p-3">
+                <svg className="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
+                </svg>
+              </div>
+              <div className="ml-5 w-0 flex-1">
+                <dt className="text-sm font-medium text-gray-500 truncate">Categoria Principal</dt>
+                <dd className="text-3xl font-semibold text-gray-900">
+                  {categoryData.length > 0 ? categoryData[0].name : "N/A"}
+                </dd>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Tabela de Categorias */}
+      <div className="grid grid-cols-1 gap-6 mb-8">
         <div className="bg-white p-6 rounded-lg shadow-lg">
-          <h3 className="text-lg font-medium text-gray-900 mb-4">Principais Usuários</h3>
+          <h3 className="text-lg font-medium text-gray-900 mb-4">Detalhamento por Categorias</h3>
+          <p className="text-sm text-gray-500 mb-4">
+            Análise detalhada do volume de chamados por categoria, permitindo identificar áreas críticas e planejar recursos adequadamente.
+          </p>
           <div className="overflow-hidden">
             <table className="min-w-full divide-y divide-gray-200">
               <thead className="bg-gray-50">
                 <tr>
-                  <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Usuário</th>
-                  <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tickets</th>
+                  <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Categoria</th>
+                  <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Total de Chamados</th>
+                  <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Porcentagem</th>
                 </tr>
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
-                {topUsers.map((user, index) => (
-                  <tr key={index} className={index % 2 === 0 ? 'bg-white' : 'bg-gray-50'}>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{user.email}</td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                      <div className="flex items-center">
-                        <span className="mr-2">{user.count}</span>
-                        <div className="relative w-full h-2 bg-gray-200 rounded">
+                {categoryData.map((category) => {
+                  const percentage = Math.round((category.count / categoryData.reduce((sum, cat) => sum + cat.count, 0)) * 100);
+                  return (
+                    <tr key={category.id} className="hover:bg-gray-50">
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <div className="text-sm font-medium text-gray-900">{category.name}</div>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <div className="text-sm text-gray-900">{category.count}</div>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <div className="w-full bg-gray-200 rounded-full h-2.5">
                           <div 
-                            className="absolute top-0 left-0 h-2 bg-blue-500 rounded"
-                            style={{ width: `${(user.count / topUsers[0].count) * 100}%` }}
+                            className="bg-blue-600 h-2.5 rounded-full" 
+                            style={{ width: `${percentage}%` }}
                           ></div>
                         </div>
-                      </div>
-                    </td>
-                  </tr>
-                ))}
+                        <span className="text-sm text-gray-500">{percentage}%</span>
+                      </td>
+                    </tr>
+                  );
+                })}
               </tbody>
             </table>
           </div>
         </div>
-
-        {/* Tickets Recentes */}
-        <div className="bg-white p-6 rounded-lg shadow-lg">
-          <h3 className="text-lg font-medium text-gray-900 mb-4">Tickets Recentes</h3>
-          <div className="overflow-hidden">
-            <ul className="divide-y divide-gray-200">
-              {recentTickets.map((ticket) => (
-                <li key={ticket.id} className="py-4 hover:bg-gray-50 transition-colors duration-150">
-                  <div className="flex items-center justify-between">
-                    <div className="truncate">
-                      <p className="text-sm font-medium text-gray-900 truncate">{ticket.title}</p>
-                      <p className="text-sm text-gray-500 flex items-center">
-                        <span className="mr-2">Criado em {new Date(ticket.created_at).toLocaleDateString('pt-BR')}</span>
-                        <span>•</span>
-                        <span className="ml-2">Por {ticket.user?.email.split('@')[0] || 'Desconhecido'}</span>
-                      </p>
-                    </div>
-                    <div className="flex items-center">
-                      <div className={`px-2 py-1 text-xs font-medium rounded-full ${
-                        ticket.status === 'open' ? 'bg-yellow-100 text-yellow-800' :
-                        ticket.status === 'in progress' ? 'bg-blue-100 text-blue-800' :
-                        'bg-green-100 text-green-800'
-                      }`}>
-                        {ticket.status === 'open' ? 'Aberto' : 
-                         ticket.status === 'in progress' ? 'Em Andamento' : 'Fechado'}
-                      </div>
-                      <button 
-                        onClick={() => navigate(`/ticket/${ticket.id}`)}
-                        className="ml-3 text-blue-600 hover:text-blue-800"
-                      >
-                        <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-                        </svg>
-                      </button>
-                    </div>
-                  </div>
-                </li>
-              ))}
-            </ul>
-          </div>
-          <div className="mt-4">
-            <button 
-              onClick={() => navigate('/tickets')} 
-              className="w-full inline-flex justify-center items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors duration-200"
-            >
-              Ver Todos os Tickets
-              <svg className="ml-2 -mr-1 h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
-              </svg>
-            </button>
-          </div>
-        </div>
       </div>
+
+      {/* Conteúdo existente... */}
     </PageContainer>
   );
 }

@@ -24,6 +24,7 @@ function TicketDetails() {
   const [isLoading, setIsLoading] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState(null);
+  const [categories, setCategories] = useState([]);
   const commentRef = useRef(null);
   const navigate = useNavigate();
 
@@ -96,6 +97,34 @@ function TicketDetails() {
     
     fetchTicketData();
   }, [id]);
+
+  // Adicione um efeito para buscar as categorias
+  useEffect(() => {
+    let isMounted = true;
+    
+    async function fetchCategories() {
+      try {
+        const response = await fetch('http://localhost:5000/api/tickets/categories');
+        if (!response.ok) throw new Error('Falha ao carregar categorias');
+        const data = await response.json();
+        if (isMounted) setCategories(data);
+      } catch (err) {
+        console.error('Erro ao buscar categorias:', err);
+      }
+    }
+    
+    fetchCategories();
+    
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+  
+  // Encontrar o nome da categoria pelo ID
+  const getCategoryName = (categoryId) => {
+    const category = categories.find(c => c.id === categoryId);
+    return category ? category.name : categoryId;
+  };
 
   // Update the handleAddComment function
   const handleAddComment = async (e) => {
@@ -462,6 +491,18 @@ function TicketDetails() {
                   <div>
                     <div className="text-xs text-gray-500 mb-1">Última atualização</div>
                     <div className="text-sm text-gray-900">{formatDate(ticket.updated_at)}</div>
+                  </div>
+                  
+                  <div>
+                    <div className="text-xs text-gray-500 mb-1">Categoria</div>
+                    <div className="flex items-center">
+                      <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-indigo-100 text-indigo-800">
+                        <svg className="mr-1.5 h-2 w-2 text-indigo-400" fill="currentColor" viewBox="0 0 8 8">
+                          <circle cx="4" cy="4" r="3" />
+                        </svg>
+                        {getCategoryName(ticket.category || 'outro')}
+                      </span>
+                    </div>
                   </div>
                 </div>
               </div>

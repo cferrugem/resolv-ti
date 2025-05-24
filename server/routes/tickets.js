@@ -8,6 +8,32 @@ const router = express.Router();
 const supabaseUrl = process.env.SUPABASE_URL;
 const supabaseAnonKey = process.env.SUPABASE_ANON_KEY;
 
+// Endpoint para listar categorias disponíveis
+router.get('/categories', async (req, res) => {
+  try {
+    // Categorias predefinidas para suporte de TI
+    const categories = [
+      { id: 'hardware', name: 'Hardware', description: 'Problemas com equipamentos físicos' },
+      { id: 'software', name: 'Software', description: 'Problemas com programas e sistemas operacionais' },
+      { id: 'rede', name: 'Rede/Internet', description: 'Problemas de conexão e rede' },
+      { id: 'email', name: 'Email/Comunicação', description: 'Problemas com email e ferramentas de comunicação' },
+      { id: 'impressora', name: 'Impressoras', description: 'Problemas com impressoras e digitalização' },
+      { id: 'seguranca', name: 'Segurança', description: 'Questões relacionadas à segurança digital' },
+      { id: 'acesso', name: 'Acesso/Contas', description: 'Problemas com senhas e permissões' },
+      { id: 'sistemas', name: 'Sistemas Internos', description: 'Problemas com sistemas da empresa' },
+      { id: 'aplicacao', name: 'Erro de Aplicação', description: 'Erros em aplicativos específicos' },
+      { id: 'outro', name: 'Outros', description: 'Outros problemas não listados' }
+    ];
+    
+    return res.status(200).json(categories);
+  } catch (err) {
+    console.error('Erro ao listar categorias:', err);
+    return res.status(500).json({ error: 'Erro interno do servidor' });
+  }
+});
+
+// Modifique a rota POST para incluir categoria
+
 router.post('/', async (req, res) => {
   try {
     const token = req.headers.authorization?.split(' ')[1];
@@ -30,30 +56,41 @@ router.post('/', async (req, res) => {
       return res.status(401).json({ error: 'Invalid authentication token' });
     }
 
-    const ticketData = {
-      title: req.body.title,
-      description: req.body.description,
-      priority: req.body.priority,
-      status: 'open',
-      user_id: user.id,
-      created_at: new Date().toISOString()
-    };
+    const { title, description, priority, category } = req.body;
+    
+    // Validação básica
+    if (!title || !description) {
+      return res.status(400).json({ error: 'Título e descrição são obrigatórios' });
+    }
 
+    // Validar prioridade
+    const validPriorities = ['low', 'medium', 'high'];
+    if (priority && !validPriorities.includes(priority)) {
+      return res.status(400).json({ error: 'Prioridade inválida' });
+    }
+
+    // Criar ticket com a categoria
     const { data, error } = await supabase
       .from('tickets')
-      .insert([ticketData])
+      .insert({
+        title,
+        description,
+        priority: priority || 'medium',
+        category: category || 'outro', // Incluir categoria
+        user_id: user.id
+      })
       .select()
       .single();
 
     if (error) {
-      console.error('Database error:', error);
+      console.error('Erro no banco de dados:', error);
       return res.status(500).json({ error: error.message });
     }
 
     return res.status(201).json(data);
   } catch (err) {
-    console.error('Server error:', err);
-    return res.status(500).json({ error: err.message });
+    console.error('Erro do servidor:', err);
+    return res.status(500).json({ error: 'Erro interno do servidor' });
   }
 });
 

@@ -16,7 +16,9 @@ function TicketList() {
   const [statusFilter, setStatusFilter] = useState('all');
   const [priorityFilter, setPriorityFilter] = useState('all');
   const [assignmentFilter, setAssignmentFilter] = useState('all');
+  const [categoryFilter, setCategoryFilter] = useState('all');
   const [sortBy, setSortBy] = useState('newest');
+  const [categories, setCategories] = useState([]);
   
   const navigate = useNavigate();
 
@@ -70,7 +72,19 @@ function TicketList() {
       }
     }
 
+    async function fetchCategories() {
+      try {
+        const response = await fetch('http://localhost:5000/api/tickets/categories');
+        if (!response.ok) throw new Error('Falha ao carregar categorias');
+        const data = await response.json();
+        if (isMounted) setCategories(data);
+      } catch (err) {
+        console.error('Erro ao buscar categorias:', err);
+      }
+    }
+
     fetchData();
+    fetchCategories();
     
     return () => {
       isMounted = false;
@@ -98,6 +112,11 @@ function TicketList() {
       result = result.filter(ticket => ticket.assigned_to === null);
     }
     
+    // Aplicar filtro de categoria
+    if (categoryFilter !== 'all') {
+      result = result.filter(ticket => ticket.category === categoryFilter);
+    }
+    
     // Aplicar busca
     if (search) {
       const searchLower = search.toLowerCase();
@@ -122,7 +141,7 @@ function TicketList() {
     }
     
     setFilteredTickets(result);
-  }, [tickets, statusFilter, priorityFilter, assignmentFilter, search, sortBy]);
+  }, [tickets, statusFilter, priorityFilter, assignmentFilter, categoryFilter, search, sortBy]);
 
   // Calcular estatísticas
   const stats = {
@@ -139,6 +158,7 @@ function TicketList() {
     setStatusFilter('all');
     setPriorityFilter('all');
     setAssignmentFilter('all');
+    setCategoryFilter('all');
     setSortBy('newest');
   };
 
@@ -253,7 +273,7 @@ function TicketList() {
               <h2 className="text-lg font-medium text-gray-900">Filtrar Chamados</h2>
             </div>
             <div className="p-4">
-              <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-6 gap-4">
                 <div>
                   <label htmlFor="search" className="block text-sm font-medium text-gray-700 mb-1">Pesquisar</label>
                   <div className="mt-1 relative rounded-md shadow-sm">
@@ -327,6 +347,21 @@ function TicketList() {
                     <option value="all">Todos</option>
                     <option value="assigned">Atribuídos</option>
                     <option value="unassigned">Não Atribuídos</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label htmlFor="category" className="block text-sm font-medium text-gray-700 mb-1">Categoria</label>
+                  <select
+                    id="category"
+                    value={categoryFilter}
+                    onChange={(e) => setCategoryFilter(e.target.value)}
+                    className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md"
+                  >
+                    <option value="all">Todas as Categorias</option>
+                    {categories.map(cat => (
+                      <option key={cat.id} value={cat.id}>{cat.name}</option>
+                    ))}
                   </select>
                 </div>
                 

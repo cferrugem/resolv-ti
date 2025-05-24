@@ -9,14 +9,15 @@ import CreateTicket from './components/CreateTicket';
 import TicketDetails from './pages/TicketDetails';
 import TicketList from './pages/TicketList';
 import RequireAuth from './components/RequireAuth';
+import LoadingSpinner from './components/LoadingSpinner';
 
-// Add this new component
+// Update the existing Unauthorized component
 function Unauthorized() {
   return (
     <div className="min-h-[80vh] flex items-center justify-center px-4">
       <div className="max-w-md w-full bg-white p-8 rounded-lg shadow-md">
-        <h1 className="text-2xl font-bold text-red-600 mb-4">Unauthorized Access</h1>
-        <p className="text-gray-600">You don't have permission to access this page.</p>
+        <h1 className="text-2xl font-bold text-red-600 mb-4">Acesso Não Autorizado</h1>
+        <p className="text-gray-600">Você não tem permissão para acessar esta página.</p>
       </div>
     </div>
   );
@@ -42,12 +43,16 @@ function App() {
                 </PublicRoute>
               } />
 
-              {/* Protected routes */}
+              {/* Root route with proper role-based redirect */}
               <Route path="/" element={
                 <RequireAuth>
-                  {({ role }) => role === 'staff' ? <Navigate to="/dashboard" /> : <Navigate to="/my-tickets" />}
+                  {({ role }) => (
+                    <LoadingSpinner />
+                  )}
                 </RequireAuth>
               } />
+
+              {/* Protected routes */}
               <Route path="/dashboard" element={
                 <RequireAuth role="staff">
                   <Dashboard />

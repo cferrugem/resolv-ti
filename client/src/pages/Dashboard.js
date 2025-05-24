@@ -50,6 +50,8 @@ function Dashboard() {
   const [categoryData, setCategoryData] = useState([]);
   const [categoryChartData, setCategoryChartData] = useState({ labels: [], datasets: [] });
   const [categories, setCategories] = useState([]);
+  const [userTicketsData, setUserTicketsData] = useState({ labels: [], datasets: [] });
+  const [techTicketsData, setTechTicketsData] = useState({ labels: [], datasets: [] });
 
   useEffect(() => {
     let isMounted = true;
@@ -259,6 +261,44 @@ function Dashboard() {
         };
         
         if (isMounted) setCategoryChartData(categoryChart);
+
+        // Process user tickets data
+        const userStats = Object.entries(userCounts)
+          .sort((a, b) => b[1] - a[1])
+          .slice(0, 10); // Get top 10 users
+
+        setUserTicketsData({
+          labels: userStats.map(([email]) => email.split('@')[0]),
+          datasets: [{
+            label: 'Chamados Abertos',
+            data: userStats.map(([_, count]) => count),
+            backgroundColor: 'rgba(54, 162, 235, 0.7)',
+            borderColor: 'rgb(54, 162, 235)',
+            borderWidth: 1
+          }]
+        });
+
+        // Process technician tickets data
+        const techStats = Object.entries(staffData)
+          .sort((a, b) => b[1].assigned - a[1].assigned)
+          .slice(0, 10); // Get top 10 techs
+
+        setTechTicketsData({
+          labels: techStats.map(([email]) => email.split('@')[0]),
+          datasets: [{
+            label: 'Chamados Atribuídos',
+            data: techStats.map(([_, stats]) => stats.assigned),
+            backgroundColor: 'rgba(75, 192, 192, 0.7)',
+            borderColor: 'rgb(75, 192, 192)',
+            borderWidth: 1
+          }, {
+            label: 'Chamados Fechados',
+            data: techStats.map(([_, stats]) => stats.closed),
+            backgroundColor: 'rgba(255, 99, 132, 0.7)',
+            borderColor: 'rgb(255, 99, 132)',
+            borderWidth: 1
+          }]
+        });
 
       } catch (err) {
         console.error('Erro ao buscar dados do dashboard:', err);
@@ -661,6 +701,81 @@ function Dashboard() {
                 })}
               </tbody>
             </table>
+          </div>
+        </div>
+      </div>
+
+      {/* Novos Gráficos de Usuários e Técnicos */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+        {/* Gráfico de Usuários */}
+        <div className="bg-white p-6 rounded-lg shadow-lg">
+          <h3 className="text-lg font-medium text-gray-900 mb-4">Top 10 Usuários</h3>
+          <p className="text-sm text-gray-500 mb-4">
+            Usuários que mais abriram chamados no período.
+          </p>
+          <div className="h-80">
+            <Bar 
+              data={userTicketsData} 
+              options={{
+                maintainAspectRatio: false,
+                plugins: {
+                  legend: {
+                    display: false
+                  }
+                },
+                scales: {
+                  y: {
+                    beginAtZero: true,
+                    ticks: {
+                      precision: 0
+                    }
+                  },
+                  x: {
+                    ticks: {
+                      autoSkip: false,
+                      maxRotation: 45,
+                      minRotation: 45
+                    }
+                  }
+                }
+              }}
+            />
+          </div>
+        </div>
+
+        {/* Gráfico de Técnicos */}
+        <div className="bg-white p-6 rounded-lg shadow-lg">
+          <h3 className="text-lg font-medium text-gray-900 mb-4">Desempenho da Equipe</h3>
+          <p className="text-sm text-gray-500 mb-4">
+            Chamados atribuídos vs. fechados por técnico.
+          </p>
+          <div className="h-80">
+            <Bar 
+              data={techTicketsData}
+              options={{
+                maintainAspectRatio: false,
+                plugins: {
+                  legend: {
+                    position: 'top'
+                  }
+                },
+                scales: {
+                  y: {
+                    beginAtZero: true,
+                    ticks: {
+                      precision: 0
+                    }
+                  },
+                  x: {
+                    ticks: {
+                      autoSkip: false,
+                      maxRotation: 45,
+                      minRotation: 45
+                    }
+                  }
+                }
+              }}
+            />
           </div>
         </div>
       </div>

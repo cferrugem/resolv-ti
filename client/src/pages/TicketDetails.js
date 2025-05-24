@@ -454,10 +454,10 @@ function TicketDetails() {
                     <div className="flex items-center">
                       <span className="inline-flex items-center justify-center h-8 w-8 rounded-full bg-gray-100 text-gray-700 mr-2">
                         <span className="text-xs font-medium leading-none">
-                          {user?.email?.charAt(0).toUpperCase() || 'U'}
+                          {ticket.user?.email?.charAt(0).toUpperCase() || 'U'}
                         </span>
                       </span>
-                      <span className="text-sm font-medium text-gray-900">{user.email}</span>
+                      <span className="text-sm font-medium text-gray-900">{ticket.user?.email || 'Usuário não encontrado'}</span>
                     </div>
                   </div>
                   

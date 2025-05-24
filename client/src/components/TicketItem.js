@@ -204,7 +204,16 @@ function TicketItem({ ticket, isStaff, staff = [] }) {
             </svg>
           </div>
           <div className="ml-2">
-            <span className="font-medium text-gray-900">{new Date(ticket.created_at).toLocaleDateString()}</span> - Criado por {ticket.created_by}
+            <span className="font-medium text-gray-900">
+              {new Date(ticket.created_at).toLocaleDateString()}
+            </span>
+            {' - '}
+            <span>
+              Criado por{' '}
+              <span className="text-gray-900 font-medium">
+                {ticket.user?.email || 'Usuário não encontrado'}
+              </span>
+            </span>
           </div>
         </div>
         

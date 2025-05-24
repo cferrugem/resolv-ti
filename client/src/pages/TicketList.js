@@ -29,14 +29,13 @@ function TicketList() {
       try {
         setIsLoading(true);
         
-        // Buscar chamados com informações do usuário
-        const { data: ticketsData, error: ticketsError } = await supabase
+        // Fetch tickets with user information
+        const { data: tickets, error: ticketsError } = await supabase
           .from('tickets')
           .select(`
             *,
             user:user_id (
               id,
-              role,
               email
             ),
             assigned_staff:assigned_to (
@@ -48,7 +47,7 @@ function TicketList() {
           .order('created_at', { ascending: false });
 
         if (ticketsError) throw ticketsError;
-        if (isMounted) setTickets(ticketsData || []);
+        if (isMounted) setTickets(tickets || []);
 
         // Buscar dados da equipe de suporte
         const { data: staffData, error: staffError } = await supabase

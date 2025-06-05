@@ -112,6 +112,24 @@ Para suportar um número crescente de usuários e tickets, o ResolvTI incorpora 
 * Funções RPC personalizadas
 * Políticas de segurança granulares
 
+  ## 🆚 Comparativo Profissional: ResolvTI vs. GLPI, Freshdesk e Zendesk
+
+| Critério                       | **ResolvTI**                         | **GLPI**                        | **Freshdesk**                 | **Zendesk**                  |
+|--------------------------------|--------------------------------------|---------------------------------|-------------------------------|------------------------------|
+| **Interface**                  | Moderna, minimalista e intuitiva     | Tradicional e densa             | Moderna, orientada ao usuário | Moderna, corporativa         |
+| **Implantação**                | Rápida (cloud ou local)              | Complexa (infraestrutura própria)| 100% Cloud, fácil             | 100% Cloud, fácil            |
+| **Customização**               | Total, código aberto                 | Alta, via plugins/scripts       | Limitada, requer planos pagos | Média, exige plano avançado  |
+| **Custo**                      | Gratuito (open source)               | Gratuito, manutenção cara       | Pago (plano gratuito limitado)| Pago (plano gratuito limitado)|
+| **Foco de Uso**                | Essencial, sob medida                | Corporativo, multi-módulo       | Corporativo, multi-módulo     | Corporativo, multi-módulo    |
+| **Usabilidade**                | Intuitiva para qualquer usuário      | Curva de aprendizado acentuada  | Fácil, mas menus extensos     | Fácil, menus avançados       |
+| **Acompanhamento de Chamados** | Transparente e simplificado          | Avançado, porém complexo        | Completo, porém genérico      | Completo, porém genérico     |
+| **Notificações**               | Diretas e configuráveis              | E-mail, SMS, plugins            | E-mail, app, WhatsApp         | E-mail, app, WhatsApp        |
+| **Adaptação ao Cliente**       | Total, desenvolvimento sob demanda   | Baixa, solução genérica         | Parcial, depende do plano     | Parcial, depende do plano    |
+| **Segurança**                  | JWT, RLS, Supabase                   | LDAP, permissões avançadas      | Padrão de mercado             | Padrão de mercado            |
+| **Requisitos de Sistema**      | Leves (stack moderna)                | Altos (infraestrutura robusta)  | Apenas conexão com internet   | Apenas conexão com internet  |
+
+**Figura 1 – Comparativo profissional entre ResolvTI, GLPI, Freshdesk e Zendesk. Destaque para a simplicidade, adaptabilidade e custo zero do ResolvTI frente aos principais sistemas do mercado.**
+
 ## 🔧 Pré-requisitos
 
 Antes de começar, certifique-se de ter instalado:

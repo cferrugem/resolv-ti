@@ -1,5 +1,5 @@
 # 🚀 ResolvTI -  Modernizando o Suporte Técnico com Automação e Eficiência
-👨‍💻 **Desenvolvedores:** Cleiton Ferrugem, Lucas Gades
+👨‍💻 **Desenvolvedores:** Cleiton Ferrugem e Lucas Gades
 
 ## 🎯 O Desafio do Suporte Técnico Tradicional
 

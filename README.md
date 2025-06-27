@@ -57,6 +57,7 @@ Figura Comparativo - ResolvTI versus GLPI, Freshdesk e Zendesk: eficiência,
 ## 🚧 Em desenvolvimento
 
 - Filtros avançados por prioridade, status, período e categoria
+- Responsividade
 - Notificações automáticas por e-mail sobre comentários nos chamados
 - Dashboard com atualização automática (refresh a cada 10–15 segundos)
 - Indicação clara do período dos dados exibidos ("últimos 7 dias" etc.)

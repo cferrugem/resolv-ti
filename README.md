@@ -1,6 +1,6 @@
 # 🚀 ResolvTI: Modernizando o Suporte Técnico com Automação e Eficiência
 
-**Desenvolvido por Cleiton Ferrugem e Lucas Gades**
+**👨‍💻 Desenvolvido por Cleiton Ferrugem e Lucas Gades**
 
 ---
 
@@ -12,19 +12,7 @@ Em muitas organizações, o suporte de TI ainda acontece por telefone – um mé
 
 ## 💡 O que é o ResolvTI?
 
-O **ResolvTI** é uma plataforma web criada para transformar o atendimento de TI. Com ela, a abertura, acompanhamento e solução de chamados passam a ser centralizados, organizados e automatizados, trazendo mais agilidade, controle e inteligência ao suporte técnico.
-
----
-
-## 🗂️ Categorias de Chamados
-
-Uma das melhorias do ResolvTI é a possibilidade de **categorização dos chamados**, permitindo que cada solicitação seja classificada como, por exemplo:
-- Hardware (problemas físicos ou equipamentos)
-- Sistemas (erros, dúvidas ou suporte a sistemas internos)
-- Programas (softwares de terceiros e aplicativos)
-- Outros (demandas diversas)
-
-Isso facilita o direcionamento correto dos chamados, análise de demandas e geração de relatórios para a equipe técnica e gestores.
+O **ResolvTI** é uma plataforma web criada para transformar o atendimento de TI. Com ela, a abertura, acompanhamento e solução de chamados passam a ser centralizados, organizados e automatizados, trazendo mais agilidade, controle e eficiência ao suporte técnico.
 
 ---
 
@@ -38,14 +26,14 @@ Isso facilita o direcionamento correto dos chamados, análise de demandas e gera
 | Custo                   | ⭐⭐⭐⭐⭐        | ⭐⭐⭐⭐⭐         | ⭐⭐            | ⭐             |
 | Foco em automação TI    | ⭐⭐⭐⭐⭐        | ⭐⭐⭐⭐          | ⭐⭐⭐           | ⭐⭐⭐           |
 | Dashboard em tempo real | ⭐⭐⭐⭐⭐        | ⭐⭐⭐           | ⭐⭐⭐⭐          | ⭐⭐⭐⭐          |
-| Categorias dos chamados | ⭐⭐⭐⭐⭐        | ⭐⭐⭐⭐          | ⭐⭐⭐⭐          | ⭐⭐⭐⭐          |
+
+> **Notas atribuídas com base em análise de documentação oficial, experiência prática, pesquisa de mercado e feedbacks de usuários. Para detalhes, consulte a justificativa ao final deste artigo.*
 
 **Diferenciais do ResolvTI:**  
 - Interface leve, moderna e responsiva  
 - Dashboard centralizado e personalizável  
-- Filtros avançados, atribuição de tarefas, atualização automática  
-- Categorização clara dos chamados  
-- Foco em órgãos públicos, sem burocracia e licenciamento caro
+- Filtros avançados, atribuição de tarefas e atualização automática  
+- Flexível para atender empresas de todos os portes e segmentos (públicos e privados)
 
 ---
 
@@ -71,7 +59,7 @@ Isso facilita o direcionamento correto dos chamados, análise de demandas e gera
 ## 🧪 Funcionalidades já disponíveis
 
 - Cadastro e listagem de chamados via formulário digital  
-- Categorização dos chamados (hardware, sistemas, programas, outros)  
+- Categorização de chamados por tipo (hardware, sistemas, programas, outros)  
 - API REST integrada ao Supabase  
 - Autenticação de usuários (cliente e staff)  
 - Dashboard inicial para equipe técnica
@@ -99,7 +87,7 @@ Isso facilita o direcionamento correto dos chamados, análise de demandas e gera
 
 ## ✅ Pontos Fortes
 
-- Atende a uma necessidade real e comum em equipes de TI  
+- Atende a uma necessidade real, comum em equipes de TI de diferentes setores  
 - Interface amigável e personalizável  
 - Tecnologias modernas, robustas e seguras  
 - Projeto funcional já disponível  
@@ -107,12 +95,11 @@ Isso facilita o direcionamento correto dos chamados, análise de demandas e gera
 
 ---
 
-## ❗ Pontos a Melhorar
+## 🛠️ Pontos a Melhorar
 
-- Detalhar diferenciais frente à concorrência na documentação  
-- Melhorar experiência de autenticação  
-- Indicar período dos dados no dashboard  
-- Refresh automático do painel
+- Detalhar os diferenciais em relação a softwares burocráticos e engessados do mercado  
+- Aprimorar autenticação para evitar lentidão e mensagens de espera no login  
+- Melhorar a dashboard: implementar categorização dos chamados (hardware, sistemas, programas, outros) e indicação clara do período dos dados exibidos  
 
 ---
 
@@ -125,8 +112,6 @@ Isso facilita o direcionamento correto dos chamados, análise de demandas e gera
 
 ## 🏁 Conclusão
 
-O ResolvTI é uma resposta inteligente e inovadora para os desafios do suporte técnico, trazendo automação, organização, categorização de demandas e uma experiência moderna para equipes de TI. O projeto segue evoluindo, com a meta de entregar uma solução cada vez mais robusta, eficiente e adaptada à realidade dos usuários.
+O ResolvTI é uma solução inovadora para os desafios do suporte técnico, trazendo automação, organização, categorização de demandas e uma experiência moderna para equipes de TI de qualquer tipo de organização. O projeto segue evoluindo, com a meta de entregar uma solução cada vez mais robusta, eficiente e adaptada à realidade dos usuários.
 
 ---
-
-*Gostou do projeto? Tem sugestões ou quer contribuir? Deixe seu comentário ou acesse o repositório!*

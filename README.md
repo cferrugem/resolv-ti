@@ -1,4 +1,4 @@
-# 🚀 ResolvTI: Modernizando o Suporte Técnico com Automação, IA e Eficiência
+# 🚀 ResolvTI: Modernizando o Suporte Técnico com Automação e Eficiência
 
 **Desenvolvido por Cleiton Ferrugem e Lucas Gades**
 
@@ -16,6 +16,18 @@ O **ResolvTI** é uma plataforma web criada para transformar o atendimento de TI
 
 ---
 
+## 🗂️ Categorias de Chamados
+
+Uma das melhorias do ResolvTI é a possibilidade de **categorização dos chamados**, permitindo que cada solicitação seja classificada como, por exemplo:
+- Hardware (problemas físicos ou equipamentos)
+- Sistemas (erros, dúvidas ou suporte a sistemas internos)
+- Programas (softwares de terceiros e aplicativos)
+- Outros (demandas diversas)
+
+Isso facilita o direcionamento correto dos chamados, análise de demandas e geração de relatórios para a equipe técnica e gestores.
+
+---
+
 ## ⚖️ ResolvTI x GLPI x Freshdesk x Zendesk
 
 | Critério                | ResolvTI      | GLPI           | Freshdesk      | Zendesk        |
@@ -26,13 +38,13 @@ O **ResolvTI** é uma plataforma web criada para transformar o atendimento de TI
 | Custo                   | ⭐⭐⭐⭐⭐        | ⭐⭐⭐⭐⭐         | ⭐⭐            | ⭐             |
 | Foco em automação TI    | ⭐⭐⭐⭐⭐        | ⭐⭐⭐⭐          | ⭐⭐⭐           | ⭐⭐⭐           |
 | Dashboard em tempo real | ⭐⭐⭐⭐⭐        | ⭐⭐⭐           | ⭐⭐⭐⭐          | ⭐⭐⭐⭐          |
-| IA para categorização   | 🚧 Em dev     | ❌            | ❌            | ❌             |
+| Categorias dos chamados | ⭐⭐⭐⭐⭐        | ⭐⭐⭐⭐          | ⭐⭐⭐⭐          | ⭐⭐⭐⭐          |
 
 **Diferenciais do ResolvTI:**  
 - Interface leve, moderna e responsiva  
 - Dashboard centralizado e personalizável  
-- Filtros avançados, atribuição de tarefas e atualização automática  
-- IA para categorização automática dos chamados *(em desenvolvimento)*  
+- Filtros avançados, atribuição de tarefas, atualização automática  
+- Categorização clara dos chamados  
 - Foco em órgãos públicos, sem burocracia e licenciamento caro
 
 ---
@@ -59,6 +71,7 @@ O **ResolvTI** é uma plataforma web criada para transformar o atendimento de TI
 ## 🧪 Funcionalidades já disponíveis
 
 - Cadastro e listagem de chamados via formulário digital  
+- Categorização dos chamados (hardware, sistemas, programas, outros)  
 - API REST integrada ao Supabase  
 - Autenticação de usuários (cliente e staff)  
 - Dashboard inicial para equipe técnica
@@ -67,21 +80,19 @@ O **ResolvTI** é uma plataforma web criada para transformar o atendimento de TI
 
 ## 🚧 Em desenvolvimento
 
-- Filtros avançados por prioridade, status e período  
+- Filtros avançados por prioridade, status, período e categoria  
 - Notificações automáticas por e-mail sobre comentários nos chamados  
 - Dashboard com atualização automática (refresh a cada 10-15 segundos)  
 - Indicação clara do período dos dados exibidos (“últimos 7 dias” etc.)  
-- IA para categorização automática dos chamados  
 - Análise comparativa detalhada na documentação
 
 ---
 
 ## 📅 Roadmap (Resumo)
 
-- Finalizar filtros e tela de envio de chamados
-- Publicação do MVP em Render ou Vercel
-- Entrega de modelagens (Canvas, personas, fluxogramas)
-- Testes de IA para categorização automática
+- Finalizar filtros e tela de envio de chamados  
+- Publicação do MVP em Render ou Vercel  
+- Entrega de modelagens (Canvas, personas, fluxogramas)  
 - Ampliar documentação e análise de mercado
 
 ---
@@ -91,7 +102,8 @@ O **ResolvTI** é uma plataforma web criada para transformar o atendimento de TI
 - Atende a uma necessidade real e comum em equipes de TI  
 - Interface amigável e personalizável  
 - Tecnologias modernas, robustas e seguras  
-- Projeto funcional já disponível
+- Projeto funcional já disponível  
+- Categorização dos chamados para facilitar o suporte
 
 ---
 
@@ -99,7 +111,6 @@ O **ResolvTI** é uma plataforma web criada para transformar o atendimento de TI
 
 - Detalhar diferenciais frente à concorrência na documentação  
 - Melhorar experiência de autenticação  
-- Implementar categorização automática via IA  
 - Indicar período dos dados no dashboard  
 - Refresh automático do painel
 
@@ -114,7 +125,7 @@ O **ResolvTI** é uma plataforma web criada para transformar o atendimento de TI
 
 ## 🏁 Conclusão
 
-O ResolvTI é uma resposta inteligente e inovadora para os desafios do suporte técnico, trazendo automação, controle, segurança e experiência do usuário para o centro do atendimento. O projeto segue evoluindo, com a meta de entregar uma solução cada vez mais robusta, eficiente e adaptada à realidade das equipes de TI.
+O ResolvTI é uma resposta inteligente e inovadora para os desafios do suporte técnico, trazendo automação, organização, categorização de demandas e uma experiência moderna para equipes de TI. O projeto segue evoluindo, com a meta de entregar uma solução cada vez mais robusta, eficiente e adaptada à realidade dos usuários.
 
 ---
 

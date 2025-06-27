@@ -1,4 +1,5 @@
 # 🚀 ResolvTI -  Modernizando o Suporte Técnico com Automação e Eficiência
+👨‍💻 **Desenvolvedores:** Cleiton Ferrugem, Lucas Gades
 
 ## 🎯 O Desafio do Suporte Técnico Tradicional
 
@@ -13,8 +14,15 @@ O **ResolvTI** é uma plataforma web criada para transformar o atendimento de TI
 ---
 
 ## ⚖️ Análise Comparativa: ResolvTI x GLPI x Freshdesk x Zendesk
+| Critério                | ResolvTI      | GLPI           | Freshdesk      | Zendesk        |
+|-------------------------|---------------|----------------|----------------|----------------|
+| Facilidade de uso       | ⭐⭐⭐⭐⭐        | ⭐⭐⭐           | ⭐⭐⭐⭐          | ⭐⭐⭐⭐          |
+| Personalização          | ⭐⭐⭐⭐⭐        | ⭐⭐⭐⭐          | ⭐⭐⭐           | ⭐⭐⭐           |
+| Integração com sistemas | ⭐⭐⭐⭐         | ⭐⭐⭐⭐          | ⭐⭐⭐⭐⭐         | ⭐⭐⭐⭐⭐         |
+| Custo                   | ⭐⭐⭐⭐⭐        | ⭐⭐⭐⭐⭐         | ⭐⭐            | ⭐             |
+| Foco em automação TI    | ⭐⭐⭐⭐⭐        | ⭐⭐⭐⭐          | ⭐⭐⭐           | ⭐⭐⭐           |
+| Dashboard em tempo real | ⭐⭐⭐⭐⭐        | ⭐⭐⭐           | ⭐⭐⭐⭐          | ⭐⭐⭐⭐          |
 
-Figura Comparativo - ResolvTI versus GLPI, Freshdesk e Zendesk: eficiência, leveza e praticidade no suporte técnico.
 
 ### 🌟 Diferenciais do ResolvTI
 

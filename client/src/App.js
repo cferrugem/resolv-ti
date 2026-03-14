@@ -15,15 +15,9 @@ import LoadingSpinner from './components/LoadingSpinner';
 function Unauthorized() {
   return (
     <div className="min-h-[80vh] flex items-center justify-center px-4">
-<<<<<<< HEAD
       <div className="max-w-md w-full glass-card p-8">
         <h1 className="text-2xl font-bold text-red-600 dark:text-red-400 mb-4">Acesso Não Autorizado</h1>
         <p className="text-slate-600 dark:text-slate-300">Você não tem permissão para acessar esta página.</p>
-=======
-      <div className="max-w-md w-full bg-white p-8 rounded-lg shadow-md">
-        <h1 className="text-2xl font-bold text-red-600 mb-4">Acesso Não Autorizado</h1>
-        <p className="text-gray-600">Você não tem permissão para acessar esta página.</p>
->>>>>>> 66b67d6b8b221d15e3289bfd3d220f1bbb24760a
       </div>
     </div>
   );
@@ -33,11 +27,7 @@ function App() {
   return (
     <AuthProvider>
       <Router>
-<<<<<<< HEAD
         <div className="min-h-screen">
-=======
-        <div className="min-h-screen bg-gray-100">
->>>>>>> 66b67d6b8b221d15e3289bfd3d220f1bbb24760a
           <NavBar />
           <main className="py-10">
             <Routes>

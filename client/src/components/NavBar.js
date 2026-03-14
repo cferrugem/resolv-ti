@@ -1,7 +1,6 @@
 import { Link, NavLink } from "react-router-dom";
 import { useAuth } from "../AuthContext";
 import { supabase } from "../supabase";
-<<<<<<< HEAD
 import { useState, useEffect } from "react";
 import Logo from "./Logo";
 
@@ -45,27 +44,6 @@ function NavBar() {
             </div>
             
             <div className="hidden sm:flex sm:space-x-2">
-=======
-
-function NavBar() {
-  const { user, role } = useAuth();
-
-  return (
-    <nav className="bg-white shadow-lg border-b border-gray-200">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between h-16">
-          <div className="flex">
-            <div className="flex-shrink-0 flex items-center">
-              <Link to="/" className="flex items-center">
-                <img
-                  src={`${process.env.PUBLIC_URL}/logo.png`}
-                  alt="ResolvTI Logo"
-                  className="h-16 w-auto"
-                />
-              </Link>
-            </div>
-            <div className="hidden sm:ml-6 sm:flex sm:space-x-8">
->>>>>>> 66b67d6b8b221d15e3289bfd3d220f1bbb24760a
               {/* Navigation Links */}
               {role === "staff" ? (
                 <>
@@ -73,15 +51,9 @@ function NavBar() {
                     className={({ isActive }) =>
                       `${
                         isActive
-<<<<<<< HEAD
                           ? "bg-primary-50 text-primary-700 dark:bg-primary-900/40 dark:text-primary-300"
                           : "text-slate-600 hover:bg-slate-100/50 hover:text-slate-900 dark:text-slate-300 dark:hover:bg-slate-700/60 dark:hover:text-slate-100"
                       } px-4 py-2 rounded-lg text-sm font-semibold transition-all duration-200`
-=======
-                          ? "border-primary-500 text-gray-900"
-                          : "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700"
-                      } inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium transition-colors duration-200`
->>>>>>> 66b67d6b8b221d15e3289bfd3d220f1bbb24760a
                     }
                     to="/dashboard"
                   >
@@ -91,15 +63,9 @@ function NavBar() {
                     className={({ isActive }) =>
                       `${
                         isActive
-<<<<<<< HEAD
                           ? "bg-primary-50 text-primary-700 dark:bg-primary-900/40 dark:text-primary-300"
                           : "text-slate-600 hover:bg-slate-100/50 hover:text-slate-900 dark:text-slate-300 dark:hover:bg-slate-700/60 dark:hover:text-slate-100"
                       } px-4 py-2 rounded-lg text-sm font-semibold transition-all duration-200`
-=======
-                          ? "border-primary-500 text-gray-900"
-                          : "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700"
-                      } inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium transition-colors duration-200`
->>>>>>> 66b67d6b8b221d15e3289bfd3d220f1bbb24760a
                     }
                     to="/tickets"
                   >
@@ -112,15 +78,9 @@ function NavBar() {
                     className={({ isActive }) =>
                       `${
                         isActive
-<<<<<<< HEAD
                           ? "bg-primary-50 text-primary-700 dark:bg-primary-900/40 dark:text-primary-300"
                           : "text-slate-600 hover:bg-slate-100/50 hover:text-slate-900 dark:text-slate-300 dark:hover:bg-slate-700/60 dark:hover:text-slate-100"
                       } px-4 py-2 rounded-lg text-sm font-semibold transition-all duration-200`
-=======
-                          ? "border-primary-500 text-gray-900"
-                          : "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700"
-                      } inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium transition-colors duration-200`
->>>>>>> 66b67d6b8b221d15e3289bfd3d220f1bbb24760a
                     }
                     to="/my-tickets"
                   >
@@ -130,15 +90,9 @@ function NavBar() {
                     className={({ isActive }) =>
                       `${
                         isActive
-<<<<<<< HEAD
                           ? "bg-primary-50 text-primary-700"
                           : "text-slate-600 hover:bg-slate-100/50 hover:text-slate-900"
                       } px-4 py-2 rounded-lg text-sm font-semibold transition-all duration-200`
-=======
-                          ? "border-primary-500 text-gray-900"
-                          : "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700"
-                      } inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium transition-colors duration-200`
->>>>>>> 66b67d6b8b221d15e3289bfd3d220f1bbb24760a
                     }
                     to="/create-ticket"
                   >
@@ -148,7 +102,6 @@ function NavBar() {
               )}
             </div>
           </div>
-<<<<<<< HEAD
           
           <div className="flex items-center">
             {/* Dark Mode Toggle */}
@@ -179,45 +132,23 @@ function NavBar() {
                 <button
                   onClick={() => supabase.auth.signOut()}
                   className="btn-secondary text-sm px-4 py-1.5"
-=======
-          <div className="flex items-center">
-            {user ? (
-              <div className="flex items-center space-x-4">
-                <span className="text-sm text-gray-500">{user.email}</span>
-                <button
-                  onClick={() => supabase.auth.signOut()}
-                  className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-primary-600 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 transition-colors duration-200"
->>>>>>> 66b67d6b8b221d15e3289bfd3d220f1bbb24760a
                 >
                   Sair
                 </button>
               </div>
             ) : (
-<<<<<<< HEAD
               <div className="space-x-3 flex items-center">
                 <Link
                   to="/login"
                   className="text-sm font-semibold text-slate-600 hover:text-primary-600 dark:text-slate-300 dark:hover:text-primary-400 transition-colors px-4 py-2"
-=======
-              <div className="space-x-4">
-                <Link
-                  to="/login"
-                  className="text-primary-600 hover:text-primary-700"
->>>>>>> 66b67d6b8b221d15e3289bfd3d220f1bbb24760a
                 >
                   Entrar
                 </Link>
                 <Link
                   to="/register"
-<<<<<<< HEAD
                   className="btn-primary text-sm"
                 >
                   Criar conta
-=======
-                  className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-primary-600 hover:bg-primary-700"
-                >
-                  Registrar
->>>>>>> 66b67d6b8b221d15e3289bfd3d220f1bbb24760a
                 </Link>
               </div>
             )}

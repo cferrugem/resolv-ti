@@ -1,7 +1,6 @@
 {
   "name": "server",
   "version": "1.0.0",
-<<<<<<< HEAD
   "description": "ResolvTI - Backend API (Node.js + Express + Supabase)",
   "main": "app.js",
   "scripts": {
@@ -11,16 +10,6 @@
   },
   "keywords": [],
   "author": "Cleiton Ferrugem, Lucas Gades",
-=======
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node app.js"
-  },
-  "keywords": [],
-  "author": "",
->>>>>>> 66b67d6b8b221d15e3289bfd3d220f1bbb24760a
   "license": "ISC",
   "type": "module",
   "dependencies": {
@@ -28,11 +17,8 @@
     "cors": "^2.8.5",
     "dotenv": "^16.5.0",
     "express": "^5.1.0"
-<<<<<<< HEAD
   },
   "devDependencies": {
     "nodemon": "^3.1.0"
-=======
->>>>>>> 66b67d6b8b221d15e3289bfd3d220f1bbb24760a
   }
 }

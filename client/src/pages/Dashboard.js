@@ -386,7 +386,6 @@ function Dashboard() {
     <PageContainer title="Painel de Suporte">
       {/* Seletor de período */}
       <div className="mb-6 flex justify-end">
-<<<<<<< HEAD
         <div className="inline-flex rounded-xl border border-slate-200 dark:border-slate-700 overflow-hidden" role="group">
           <button
             type="button"
@@ -395,16 +394,6 @@ function Dashboard() {
               timeFrame === 'week' 
                 ? 'bg-primary-600 text-white' 
                 : 'bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700'
-=======
-        <div className="inline-flex rounded-md shadow-sm" role="group">
-          <button
-            type="button"
-            onClick={() => setTimeFrame('week')}
-            className={`px-4 py-2 text-sm font-medium rounded-l-lg ${
-              timeFrame === 'week' 
-                ? 'bg-blue-600 text-white' 
-                : 'bg-white text-gray-700 hover:bg-gray-50'
->>>>>>> 66b67d6b8b221d15e3289bfd3d220f1bbb24760a
             }`}
           >
             Semana
@@ -412,17 +401,10 @@ function Dashboard() {
           <button
             type="button"
             onClick={() => setTimeFrame('month')}
-<<<<<<< HEAD
             className={`px-4 py-2 text-sm font-semibold border-x border-slate-200 dark:border-slate-700 transition-colors ${
               timeFrame === 'month' 
                 ? 'bg-primary-600 text-white' 
                 : 'bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700'
-=======
-            className={`px-4 py-2 text-sm font-medium ${
-              timeFrame === 'month' 
-                ? 'bg-blue-600 text-white' 
-                : 'bg-white text-gray-700 hover:bg-gray-50'
->>>>>>> 66b67d6b8b221d15e3289bfd3d220f1bbb24760a
             }`}
           >
             Mês
@@ -430,17 +412,10 @@ function Dashboard() {
           <button
             type="button"
             onClick={() => setTimeFrame('quarter')}
-<<<<<<< HEAD
             className={`px-4 py-2 text-sm font-semibold transition-colors ${
               timeFrame === 'quarter' 
                 ? 'bg-primary-600 text-white' 
                 : 'bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700'
-=======
-            className={`px-4 py-2 text-sm font-medium rounded-r-lg ${
-              timeFrame === 'quarter' 
-                ? 'bg-blue-600 text-white' 
-                : 'bg-white text-gray-700 hover:bg-gray-50'
->>>>>>> 66b67d6b8b221d15e3289bfd3d220f1bbb24760a
             }`}
           >
             Trimestre
@@ -449,13 +424,8 @@ function Dashboard() {
       </div>
 
       {/* Grid de Estatísticas */}
-<<<<<<< HEAD
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-8">
         <div className="glass-card overflow-hidden border-l-4 border-blue-500 transition-transform hover:scale-105">
-=======
-      <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-6 mb-8">
-        <div className="bg-white overflow-hidden shadow-lg rounded-lg border-l-4 border-blue-500 transition-transform hover:scale-105">
->>>>>>> 66b67d6b8b221d15e3289bfd3d220f1bbb24760a
           <div className="p-5">
             <div className="flex items-center">
               <div className="flex-shrink-0 bg-blue-500 rounded-md p-3">
@@ -464,23 +434,14 @@ function Dashboard() {
                 </svg>
               </div>
               <div className="ml-5 w-0 flex-1">
-<<<<<<< HEAD
                 <dt className="text-sm font-medium text-slate-500 dark:text-slate-400 truncate">Total de Tickets</dt>
                 <dd className="text-3xl font-bold text-slate-900 dark:text-slate-100">{totalTickets}</dd>
-=======
-                <dt className="text-sm font-medium text-gray-500 truncate">Total de Tickets</dt>
-                <dd className="text-3xl font-semibold text-gray-900">{totalTickets}</dd>
->>>>>>> 66b67d6b8b221d15e3289bfd3d220f1bbb24760a
               </div>
             </div>
           </div>
         </div>
 
-<<<<<<< HEAD
         <div className="glass-card overflow-hidden border-l-4 border-yellow-500 transition-transform hover:scale-105">
-=======
-        <div className="bg-white overflow-hidden shadow-lg rounded-lg border-l-4 border-yellow-500 transition-transform hover:scale-105">
->>>>>>> 66b67d6b8b221d15e3289bfd3d220f1bbb24760a
           <div className="p-5">
             <div className="flex items-center">
               <div className="flex-shrink-0 bg-yellow-500 rounded-md p-3">
@@ -489,23 +450,14 @@ function Dashboard() {
                 </svg>
               </div>
               <div className="ml-5 w-0 flex-1">
-<<<<<<< HEAD
                 <dt className="text-sm font-medium text-slate-500 dark:text-slate-400 truncate">Abertos</dt>
                 <dd className="text-3xl font-bold text-slate-900 dark:text-slate-100">{openTickets}</dd>
-=======
-                <dt className="text-sm font-medium text-gray-500 truncate">Abertos</dt>
-                <dd className="text-3xl font-semibold text-gray-900">{openTickets}</dd>
->>>>>>> 66b67d6b8b221d15e3289bfd3d220f1bbb24760a
               </div>
             </div>
           </div>
         </div>
 
-<<<<<<< HEAD
         <div className="glass-card overflow-hidden border-l-4 border-blue-600 transition-transform hover:scale-105">
-=======
-        <div className="bg-white overflow-hidden shadow-lg rounded-lg border-l-4 border-blue-600 transition-transform hover:scale-105">
->>>>>>> 66b67d6b8b221d15e3289bfd3d220f1bbb24760a
           <div className="p-5">
             <div className="flex items-center">
               <div className="flex-shrink-0 bg-blue-600 rounded-md p-3">
@@ -514,23 +466,14 @@ function Dashboard() {
                 </svg>
               </div>
               <div className="ml-5 w-0 flex-1">
-<<<<<<< HEAD
                 <dt className="text-sm font-medium text-slate-500 dark:text-slate-400 truncate">Em Andamento</dt>
                 <dd className="text-3xl font-bold text-slate-900 dark:text-slate-100">{inProgressTickets}</dd>
-=======
-                <dt className="text-sm font-medium text-gray-500 truncate">Em Andamento</dt>
-                <dd className="text-3xl font-semibold text-gray-900">{inProgressTickets}</dd>
->>>>>>> 66b67d6b8b221d15e3289bfd3d220f1bbb24760a
               </div>
             </div>
           </div>
         </div>
 
-<<<<<<< HEAD
         <div className="glass-card overflow-hidden border-l-4 border-green-500 transition-transform hover:scale-105">
-=======
-        <div className="bg-white overflow-hidden shadow-lg rounded-lg border-l-4 border-green-500 transition-transform hover:scale-105">
->>>>>>> 66b67d6b8b221d15e3289bfd3d220f1bbb24760a
           <div className="p-5">
             <div className="flex items-center">
               <div className="flex-shrink-0 bg-green-500 rounded-md p-3">
@@ -539,23 +482,14 @@ function Dashboard() {
                 </svg>
               </div>
               <div className="ml-5 w-0 flex-1">
-<<<<<<< HEAD
                 <dt className="text-sm font-medium text-slate-500 dark:text-slate-400 truncate">Fechados</dt>
                 <dd className="text-3xl font-bold text-slate-900 dark:text-slate-100">{closedTickets}</dd>
-=======
-                <dt className="text-sm font-medium text-gray-500 truncate">Fechados</dt>
-                <dd className="text-3xl font-semibold text-gray-900">{closedTickets}</dd>
->>>>>>> 66b67d6b8b221d15e3289bfd3d220f1bbb24760a
               </div>
             </div>
           </div>
         </div>
 
-<<<<<<< HEAD
         <div className="glass-card overflow-hidden border-l-4 border-red-500 transition-transform hover:scale-105">
-=======
-        <div className="bg-white overflow-hidden shadow-lg rounded-lg border-l-4 border-red-500 transition-transform hover:scale-105">
->>>>>>> 66b67d6b8b221d15e3289bfd3d220f1bbb24760a
           <div className="p-5">
             <div className="flex items-center">
               <div className="flex-shrink-0 bg-red-500 rounded-md p-3">
@@ -564,23 +498,14 @@ function Dashboard() {
                 </svg>
               </div>
               <div className="ml-5 w-0 flex-1">
-<<<<<<< HEAD
                 <dt className="text-sm font-medium text-slate-500 dark:text-slate-400 truncate">Urgentes</dt>
                 <dd className="text-3xl font-bold text-slate-900 dark:text-slate-100">{urgentTickets}</dd>
-=======
-                <dt className="text-sm font-medium text-gray-500 truncate">Urgentes</dt>
-                <dd className="text-3xl font-semibold text-gray-900">{urgentTickets}</dd>
->>>>>>> 66b67d6b8b221d15e3289bfd3d220f1bbb24760a
               </div>
             </div>
           </div>
         </div>
 
-<<<<<<< HEAD
         <div className="glass-card overflow-hidden border-l-4 border-purple-500 transition-transform hover:scale-105">
-=======
-        <div className="bg-white overflow-hidden shadow-lg rounded-lg border-l-4 border-purple-500 transition-transform hover:scale-105">
->>>>>>> 66b67d6b8b221d15e3289bfd3d220f1bbb24760a
           <div className="p-5">
             <div className="flex items-center">
               <div className="flex-shrink-0 bg-purple-500 rounded-md p-3">
@@ -589,24 +514,15 @@ function Dashboard() {
                 </svg>
               </div>
               <div className="ml-5 w-0 flex-1">
-<<<<<<< HEAD
                 <dt className="text-sm font-medium text-slate-500 dark:text-slate-400 truncate">Tempo Médio Resp.</dt>
                 <dd className="text-3xl font-bold text-slate-900 dark:text-slate-100">{responseTime}h</dd>
-=======
-                <dt className="text-sm font-medium text-gray-500 truncate">Tempo Médio Resp.</dt>
-                <dd className="text-3xl font-semibold text-gray-900">{responseTime}h</dd>
->>>>>>> 66b67d6b8b221d15e3289bfd3d220f1bbb24760a
               </div>
             </div>
           </div>
         </div>
 
         {/* Nova Card - Categoria mais frequente */}
-<<<<<<< HEAD
         <div className="glass-card overflow-hidden border-l-4 border-indigo-500 transition-transform hover:scale-105">
-=======
-        <div className="bg-white overflow-hidden shadow-lg rounded-lg border-l-4 border-indigo-500 transition-transform hover:scale-105">
->>>>>>> 66b67d6b8b221d15e3289bfd3d220f1bbb24760a
           <div className="p-5">
             <div className="flex items-center">
               <div className="flex-shrink-0 bg-indigo-500 rounded-md p-3">
@@ -615,13 +531,8 @@ function Dashboard() {
                 </svg>
               </div>
               <div className="ml-5 w-0 flex-1">
-<<<<<<< HEAD
                 <dt className="text-sm font-medium text-slate-500 dark:text-slate-400 truncate">Categoria Principal</dt>
                 <dd className="text-3xl font-bold text-slate-900 dark:text-slate-100">
-=======
-                <dt className="text-sm font-medium text-gray-500 truncate">Categoria Principal</dt>
-                <dd className="text-3xl font-semibold text-gray-900">
->>>>>>> 66b67d6b8b221d15e3289bfd3d220f1bbb24760a
                   {categoryData.length > 0 ? categoryData[0].name : "N/A"}
                 </dd>
               </div>
@@ -630,7 +541,6 @@ function Dashboard() {
         </div>
       </div>
 
-<<<<<<< HEAD
       {/* Container Principal dos Gráficos */}
       <div className="space-y-6 mb-8">
         
@@ -708,126 +618,10 @@ function Dashboard() {
                     arc: { borderWidth: 0 }
                   }
                 }} />
-=======
-      {/* Grid de Gráficos */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
-        {/* Gráfico de Tendências */}
-        <div className="bg-white p-6 rounded-lg shadow-lg">
-          <h3 className="text-lg font-medium text-gray-900 mb-4">Tendências de Chamados</h3>
-          <div className="h-64">
-            <Line data={trendChartData} options={{ 
-              maintainAspectRatio: false,
-              plugins: {
-                legend: {
-                  position: 'top',
-                },
-                tooltip: {
-                  mode: 'index',
-                  intersect: false,
-                }
-              },
-              scales: {
-                y: {
-                  beginAtZero: true,
-                  ticks: {
-                    precision: 0
-                  }
-                }
-              }
-            }} />
-          </div>
-        </div>
-
-        {/* Gráfico de Distribuição de Status */}
-        <div className="bg-white p-6 rounded-lg shadow-lg">
-          <h3 className="text-lg font-medium text-gray-900 mb-4">Distribuição por Status</h3>
-          <div className="h-64 flex justify-center">
-            <div style={{ maxWidth: '250px' }}>
-              <Doughnut data={statusChartData} options={{ 
-                maintainAspectRatio: false,
-                plugins: {
-                  legend: {
-                    position: 'right',
-                  }
-                },
-                cutout: '70%'
-              }} />
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Nova seção para Categorias */}
-      <div className="grid grid-cols-1 gap-6 mb-8">
-        {/* Gráfico de Distribuição por Categorias */}
-        <div className="bg-white p-6 rounded-lg shadow-lg">
-          <h3 className="text-lg font-medium text-gray-900 mb-4">Distribuição por Categorias</h3>
-          <p className="text-sm text-gray-500 mb-4">
-            Visualize a distribuição dos chamados por tipo de problema para identificar áreas que precisam de mais atenção.
-          </p>
-          <div className="h-80">
-            <Bar data={categoryChartData} options={{ 
-              maintainAspectRatio: false,
-              plugins: {
-                legend: {
-                  display: false
-                },
-                tooltip: {
-                  callbacks: {
-                    label: function(context) {
-                      const label = context.dataset.label || '';
-                      const value = context.raw || 0;
-                      const total = context.dataset.data.reduce((a, b) => a + b, 0);
-                      const percentage = Math.round((value / total) * 100);
-                      return `${label}: ${value} (${percentage}%)`;
-                    }
-                  }
-                }
-              },
-              scales: {
-                y: {
-                  beginAtZero: true,
-                  ticks: {
-                    precision: 0
-                  }
-                },
-                x: {
-                  ticks: {
-                    autoSkip: false,
-                    maxRotation: 45,
-                    minRotation: 45
-                  }
-                }
-              }
-            }} />
-          </div>
-        </div>
-      </div>
-
-      {/* Grid de Estatísticas com Card de Categoria */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-        {/* Cards existentes... */}
-
-        {/* Nova Card - Categoria mais frequente */}
-        <div className="bg-white overflow-hidden shadow-lg rounded-lg border-l-4 border-indigo-500 transition-transform hover:scale-105">
-          <div className="p-5">
-            <div className="flex items-center">
-              <div className="flex-shrink-0 bg-indigo-500 rounded-md p-3">
-                <svg className="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
-                </svg>
-              </div>
-              <div className="ml-5 w-0 flex-1">
-                <dt className="text-sm font-medium text-gray-500 truncate">Categoria Principal</dt>
-                <dd className="text-3xl font-semibold text-gray-900">
-                  {categoryData.length > 0 ? categoryData[0].name : "N/A"}
-                </dd>
->>>>>>> 66b67d6b8b221d15e3289bfd3d220f1bbb24760a
               </div>
             </div>
           </div>
         </div>
-<<<<<<< HEAD
 
         {/* Linha 2: Categorias e Desempenho (1/2 cada) */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -857,77 +651,11 @@ function Dashboard() {
                         return `${label}: ${value} (${percentage}%)`;
                       }
                     }
-=======
-      </div>
-
-      {/* Tabela de Categorias */}
-      <div className="grid grid-cols-1 gap-6 mb-8">
-        <div className="bg-white p-6 rounded-lg shadow-lg">
-          <h3 className="text-lg font-medium text-gray-900 mb-4">Detalhamento por Categorias</h3>
-          <p className="text-sm text-gray-500 mb-4">
-            Análise detalhada do volume de chamados por categoria, permitindo identificar áreas críticas e planejar recursos adequadamente.
-          </p>
-          <div className="overflow-hidden">
-            <table className="min-w-full divide-y divide-gray-200">
-              <thead className="bg-gray-50">
-                <tr>
-                  <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Categoria</th>
-                  <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Total de Chamados</th>
-                  <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Porcentagem</th>
-                </tr>
-              </thead>
-              <tbody className="bg-white divide-y divide-gray-200">
-                {categoryData.map((category) => {
-                  const percentage = Math.round((category.count / categoryData.reduce((sum, cat) => sum + cat.count, 0)) * 100);
-                  return (
-                    <tr key={category.id} className="hover:bg-gray-50">
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="text-sm font-medium text-gray-900">{category.name}</div>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="text-sm text-gray-900">{category.count}</div>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="w-full bg-gray-200 rounded-full h-2.5">
-                          <div 
-                            className="bg-blue-600 h-2.5 rounded-full" 
-                            style={{ width: `${percentage}%` }}
-                          ></div>
-                        </div>
-                        <span className="text-sm text-gray-500">{percentage}%</span>
-                      </td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-
-      {/* Novos Gráficos de Usuários e Técnicos */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
-        {/* Gráfico de Usuários */}
-        <div className="bg-white p-6 rounded-lg shadow-lg">
-          <h3 className="text-lg font-medium text-gray-900 mb-4">Top 10 Usuários</h3>
-          <p className="text-sm text-gray-500 mb-4">
-            Usuários que mais abriram chamados no período.
-          </p>
-          <div className="h-80">
-            <Bar 
-              data={userTicketsData} 
-              options={{
-                maintainAspectRatio: false,
-                plugins: {
-                  legend: {
-                    display: false
->>>>>>> 66b67d6b8b221d15e3289bfd3d220f1bbb24760a
                   }
                 },
                 scales: {
                   y: {
                     beginAtZero: true,
-<<<<<<< HEAD
                     grid: { color: 'rgba(226, 232, 240, 0.5)', drawBorder: false },
                     ticks: { precision: 0, color: '#64748b' }
                   },
@@ -1078,58 +806,6 @@ function Dashboard() {
                 }}
               />
             </div>
-=======
-                    ticks: {
-                      precision: 0
-                    }
-                  },
-                  x: {
-                    ticks: {
-                      autoSkip: false,
-                      maxRotation: 45,
-                      minRotation: 45
-                    }
-                  }
-                }
-              }}
-            />
-          </div>
-        </div>
-
-        {/* Gráfico de Técnicos */}
-        <div className="bg-white p-6 rounded-lg shadow-lg">
-          <h3 className="text-lg font-medium text-gray-900 mb-4">Desempenho da Equipe</h3>
-          <p className="text-sm text-gray-500 mb-4">
-            Chamados atribuídos vs. fechados por técnico.
-          </p>
-          <div className="h-80">
-            <Bar 
-              data={techTicketsData}
-              options={{
-                maintainAspectRatio: false,
-                plugins: {
-                  legend: {
-                    position: 'top'
-                  }
-                },
-                scales: {
-                  y: {
-                    beginAtZero: true,
-                    ticks: {
-                      precision: 0
-                    }
-                  },
-                  x: {
-                    ticks: {
-                      autoSkip: false,
-                      maxRotation: 45,
-                      minRotation: 45
-                    }
-                  }
-                }
-              }}
-            />
->>>>>>> 66b67d6b8b221d15e3289bfd3d220f1bbb24760a
           </div>
         </div>
       </div>

@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 /**
  * supabase.js — Supabase client entry point.
  *
@@ -36,16 +35,3 @@ if (USE_MOCK) {
 }
 
 export const supabase = supabaseClient;
-=======
-import { createClient } from '@supabase/supabase-js';
-
-const supabaseUrl = process.env.REACT_APP_SUPABASE_URL;
-const supabaseAnonKey = process.env.REACT_APP_SUPABASE_ANON_KEY;
-
-
-if (!supabaseUrl || !supabaseAnonKey) {
-  throw new Error('Missing Supabase environment variables');
-}
-
-export const supabase = createClient(supabaseUrl, supabaseAnonKey);
->>>>>>> 66b67d6b8b221d15e3289bfd3d220f1bbb24760a

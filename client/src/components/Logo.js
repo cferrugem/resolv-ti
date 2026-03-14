@@ -8,7 +8,7 @@ function Logo({ className = "h-10 w-auto" }) {
   return (
     <svg 
       xmlns="http://www.w3.org/2000/svg" 
-      viewBox="200 150 768 580" 
+      viewBox="234 185 693 506" 
       className={className}
       aria-label="ResolvTI Logo"
     >

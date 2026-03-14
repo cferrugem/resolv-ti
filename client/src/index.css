@@ -1,6 +1,5 @@
 @tailwind base;
 @tailwind components;
-<<<<<<< HEAD
 @tailwind utilities;
 
 @layer base {
@@ -102,6 +101,3 @@
     background: linear-gradient(to bottom, var(--accent-from), var(--accent-to));
   }
 }
-=======
-@tailwind utilities;
->>>>>>> 66b67d6b8b221d15e3289bfd3d220f1bbb24760a

@@ -1,6 +1,11 @@
 {
+<<<<<<< HEAD
   "short_name": "ResolvTI",
   "name": "ResolvTI - O Seu Portal de Soluções em TI",
+=======
+  "short_name": "React App",
+  "name": "Create React App Sample",
+>>>>>>> 66b67d6b8b221d15e3289bfd3d220f1bbb24760a
   "icons": [
     {
       "src": "favicon.ico",
@@ -8,6 +13,7 @@
       "type": "image/x-icon"
     },
     {
+<<<<<<< HEAD
       "src": "logo.svg",
       "type": "image/svg+xml",
       "sizes": "any"
@@ -15,11 +21,25 @@
     {
       "src": "favicon.jpg",
       "type": "image/jpeg",
+=======
+      "src": "logo192.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "logo512.png",
+      "type": "image/png",
+>>>>>>> 66b67d6b8b221d15e3289bfd3d220f1bbb24760a
       "sizes": "512x512"
     }
   ],
   "start_url": ".",
   "display": "standalone",
+<<<<<<< HEAD
   "theme_color": "#0B1120",
   "background_color": "#0B1120"
+=======
+  "theme_color": "#000000",
+  "background_color": "#ffffff"
+>>>>>>> 66b67d6b8b221d15e3289bfd3d220f1bbb24760a
 }

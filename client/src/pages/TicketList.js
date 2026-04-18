@@ -73,7 +73,7 @@ function TicketList() {
 
     async function fetchCategories() {
       try {
-        const response = await fetch('http://localhost:5000/api/tickets/categories');
+        const response = await fetch(`${process.env.REACT_APP_API_URL || 'http://localhost:5000'}/api/tickets/categories`);
         if (!response.ok) throw new Error('Falha ao carregar categorias');
         const data = await response.json();
         if (isMounted) setCategories(data);

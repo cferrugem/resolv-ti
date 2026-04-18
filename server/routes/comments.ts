@@ -1,20 +1,20 @@
-import express from 'express';
+import express, { Request, Response } from 'express';
 import { createClient } from '@supabase/supabase-js';
 import dotenv from 'dotenv';
 
 dotenv.config();
 
 const router = express.Router();
-const supabaseUrl = process.env.SUPABASE_URL;
-const supabaseAnonKey = process.env.SUPABASE_ANON_KEY;
+const supabaseUrl = process.env.SUPABASE_URL || '';
+const supabaseAnonKey = process.env.SUPABASE_ANON_KEY || '';
 
 // Helper function to validate UUID
-const isValidUUID = (uuid) => {
+const isValidUUID = (uuid: string): boolean => {
   const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
   return uuidRegex.test(uuid);
 };
 
-router.post('/', async (req, res) => {
+router.post('/', async (req: Request, res: Response) => {
   try {
     const token = req.headers.authorization?.split(' ')[1];
     if (!token) {
@@ -64,7 +64,7 @@ router.post('/', async (req, res) => {
     }
 
     return res.status(201).json(data);
-  } catch (err) {
+  } catch (err: any) {
     console.error('Server error:', err);
     return res.status(500).json({ error: err.message });
   }

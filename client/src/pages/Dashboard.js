@@ -52,6 +52,7 @@ function Dashboard() {
   const [categories, setCategories] = useState([]);
   const [userTicketsData, setUserTicketsData] = useState({ labels: [], datasets: [] });
   const [techTicketsData, setTechTicketsData] = useState({ labels: [], datasets: [] });
+  const [refreshKey, setRefreshKey] = useState(0);
 
   useEffect(() => {
     let isMounted = true;
@@ -91,7 +92,7 @@ function Dashboard() {
         const startDateString = startDate.toISOString();
 
         // Buscar as definições de categorias para exibir nomes amigáveis
-        const categoriesResponse = await fetch('http://localhost:5000/api/tickets/categories');
+        const categoriesResponse = await fetch(`${process.env.REACT_APP_API_URL || 'http://localhost:5000'}/api/tickets/categories`);
         if (!categoriesResponse.ok) throw new Error('Falha ao buscar categorias');
         const categoriesData = await categoriesResponse.json();
         if (isMounted) setCategories(categoriesData);
@@ -114,6 +115,7 @@ function Dashboard() {
               created_at
             )
           `)
+          .gte('created_at', startDateString)
           .order('created_at', { ascending: false });
 
         if (error) throw error;
@@ -312,7 +314,16 @@ function Dashboard() {
     return () => {
       isMounted = false;
     };
-  }, [user, role, navigate, timeFrame]);
+  }, [user, role, navigate, timeFrame, refreshKey]);
+
+  // Auto-refresh logic
+  useEffect(() => {
+    if (!user || role !== 'staff') return;
+    const interval = setInterval(() => {
+      setRefreshKey(prev => prev + 1);
+    }, 15000);
+    return () => clearInterval(interval);
+  }, [user, role]);
 
   // Dados para gráfico de status
   const statusChartData = {

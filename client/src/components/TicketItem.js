@@ -13,7 +13,7 @@ function TicketItem({ ticket, isStaff, staff = [] }) {
   useEffect(() => {
     async function fetchCategories() {
       try {
-        const response = await fetch('http://localhost:5000/api/tickets/categories');
+        const response = await fetch(`${process.env.REACT_APP_API_URL || 'http://localhost:5000'}/api/tickets/categories`);
         if (!response.ok) throw new Error('Falha ao carregar categorias');
         const data = await response.json();
         setCategories(data);
@@ -50,7 +50,7 @@ function TicketItem({ ticket, isStaff, staff = [] }) {
 
       if (updateError) {
         // Fall back to server API if direct update fails
-        const response = await fetch(`http://localhost:5000/api/tickets/${ticket.id}`, {
+        const response = await fetch(`${process.env.REACT_APP_API_URL || 'http://localhost:5000'}/api/tickets/${ticket.id}`, {
           method: 'PUT',
           headers: {
             'Content-Type': 'application/json',

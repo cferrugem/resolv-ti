@@ -1,15 +1,15 @@
-import express from 'express';
+import express, { Request, Response } from 'express';
 import { createClient } from '@supabase/supabase-js';
 import dotenv from 'dotenv';
 
 dotenv.config();
 
 const router = express.Router();
-const supabaseUrl = process.env.SUPABASE_URL;
-const supabaseAnonKey = process.env.SUPABASE_ANON_KEY;
+const supabaseUrl = process.env.SUPABASE_URL || '';
+const supabaseAnonKey = process.env.SUPABASE_ANON_KEY || '';
 
 // Endpoint para listar categorias disponíveis
-router.get('/categories', async (req, res) => {
+router.get('/categories', async (_req: Request, res: Response) => {
   try {
     // Categorias predefinidas para suporte de TI
     const categories = [
@@ -34,7 +34,7 @@ router.get('/categories', async (req, res) => {
 
 // Modifique a rota POST para incluir categoria
 
-router.post('/', async (req, res) => {
+router.post('/', async (req: Request, res: Response) => {
   try {
     const token = req.headers.authorization?.split(' ')[1];
     if (!token) {
@@ -88,7 +88,7 @@ router.post('/', async (req, res) => {
     }
 
     return res.status(201).json(data);
-  } catch (err) {
+  } catch (err: any) {
     console.error('Erro do servidor:', err);
     return res.status(500).json({ error: 'Erro interno do servidor' });
   }
@@ -96,7 +96,7 @@ router.post('/', async (req, res) => {
 
 // Update the PUT handler to handle errors better
 
-router.put('/:id', async (req, res) => {
+router.put('/:id', async (req: Request, res: Response) => {
   try {
     const token = req.headers.authorization?.split(' ')[1];
     if (!token) {
@@ -119,8 +119,8 @@ router.put('/:id', async (req, res) => {
       .eq('id', user.id)
       .single();
 
-    if (userError) {
-      return res.status(500).json({ error: userError.message });
+    if (userError || !userData) {
+      return res.status(500).json({ error: userError?.message || 'User data not found' });
     }
 
     if (userData.role !== 'staff') {
@@ -134,9 +134,20 @@ router.put('/:id', async (req, res) => {
     }
 
     // Create update object with only valid fields
-    const updateData = {};
-    if (req.body.status) updateData.status = req.body.status;
-    if ('assigned_to' in req.body) updateData.assigned_to = req.body.assigned_to;
+    const updateData: any = {};
+    
+    if (req.body.status) {
+      const validStatuses = ['open', 'in progress', 'closed'];
+      if (!validStatuses.includes(req.body.status)) {
+        return res.status(400).json({ error: 'Invalid status provided' });
+      }
+      updateData.status = req.body.status;
+    }
+    
+    if ('assigned_to' in req.body) {
+      updateData.assigned_to = req.body.assigned_to;
+    }
+    
     updateData.updated_at = new Date().toISOString();
 
     // Update ticket
@@ -157,7 +168,7 @@ router.put('/:id', async (req, res) => {
     }
 
     return res.status(200).json(data);
-  } catch (err) {
+  } catch (err: any) {
     console.error('Server error:', err);
     return res.status(500).json({ error: err.message });
   }

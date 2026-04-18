@@ -222,6 +222,16 @@ class QueryBuilder {
     return this;
   }
 
+  gte(col, val) {
+    this._filters.push({ type: 'gte', col, val });
+    return this;
+  }
+
+  lte(col, val) {
+    this._filters.push({ type: 'lte', col, val });
+    return this;
+  }
+
   order(col, opts = {}) {
     this._order = { col, asc: opts.ascending !== false };
     return this;
@@ -238,91 +248,27 @@ class QueryBuilder {
   }
 
   // ── helpers ──
-  _rows() { return mockStore[this._table] || []; }
-
-  _applyFilters(rows) {
-    return rows.filter(row =>
-      this._filters.every(f => {
-        if (f.type === 'eq') return row[f.col] === f.val;
-        if (f.type === 'in') return f.vals.includes(row[f.col]);
-        return true;
-      })
-    );
-  }
-
-  _withRelations(row) {
-    if (this._table !== 'tickets') return row;
-    const owner = mockStore.users.find(u => u.id === row.user_id);
-    const staff = mockStore.users.find(u => u.id === row.assigned_to);
-    const comments = mockStore.ticket_comments.filter(c => c.ticket_id === row.id);
-    return {
-      ...row,
-      user:            owner ? { id: owner.id, email: owner.email, role: owner.role } : null,
-      assigned_staff:  staff ? { id: staff.id, email: staff.email, role: staff.role } : null,
-      assigned_to_user: staff ? { id: staff.id } : null,
-      ticket_comments: comments,
-    };
-  }
-
-  _run() {
-    const table = mockStore[this._table];
-
-    // ── SELECT ──
-    if (this._op === 'select') {
-      let rows = this._applyFilters([...table]);
-
-      // Attach relations for tickets table
-      rows = rows.map(r => this._withRelations(r));
-
-      // Apply ORDER
-      if (this._order) {
-        const { col, asc } = this._order;
-        rows.sort((a, b) => {
-          const va = a[col], vb = b[col];
-          if (asc)  return va < vb ? -1 : va > vb ? 1 : 0;
-          return    va > vb ? -1 : va < vb ? 1 : 0;
-        });
-      }
-
-      if (this._single) {
-        return { data: rows[0] ?? null, error: rows[0] ? null : { message: 'Nenhum registro encontrado', code: 'PGRST116' } };
-      }
-      return { data: rows, error: null };
-    }
-
-    // ── INSERT ──
-    if (this._op === 'insert') {
-      const items = Array.isArray(this._payload) ? this._payload : [this._payload];
-      const now = new Date().toISOString();
-      const inserted = items.map(item => {
-        const row = { id: genUUID(), created_at: now, updated_at: now, ...item };
-        table.push(row);
-        return row;
+  async _run() {
+    try {
+      const response = await fetch('http://localhost:5000/api/mock/query', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          _table: this._table,
+          _filters: this._filters,
+          _order: this._order,
+          _op: this._op,
+          _payload: this._payload,
+          _single: this._single
+        })
       });
-      const result = Array.isArray(this._payload) ? inserted : inserted[0];
-      if (this._single) return { data: inserted[0], error: null };
-      return { data: result, error: null };
+      return await response.json();
+    } catch (err) {
+      return { data: null, error: { message: err.message } };
     }
-
-    // ── UPDATE ──
-    if (this._op === 'update') {
-      const toUpdate = this._applyFilters(table);
-      toUpdate.forEach(row => Object.assign(row, this._payload, { updated_at: new Date().toISOString() }));
-      const result = toUpdate[0] ?? null;
-      if (this._single) return { data: result, error: null };
-      return { data: toUpdate, error: null };
-    }
-
-    // ── DELETE ──
-    if (this._op === 'delete') {
-      const toDelete = this._applyFilters(table);
-      const ids = new Set(toDelete.map(r => r.id));
-      mockStore[this._table] = table.filter(r => !ids.has(r.id));
-      return { data: toDelete, error: null };
-    }
-
-    return { data: null, error: { message: 'Operação desconhecida' } };
   }
+
+
 }
 
 // ─── Mock Supabase Client ─────────────────────────────────────────────────────
@@ -331,22 +277,18 @@ export const supabase = {
     return new QueryBuilder(table);
   },
 
-  rpc(fnName, params) {
-    // Handles: create_ticket_comment(p_ticket_id, p_comment_text)
-    if (fnName === 'create_ticket_comment') {
-      const session = _loadSession();
-      if (!session) return Promise.resolve({ data: null, error: { message: 'Não autenticado' } });
-      const comment = {
-        id:         genUUID(),
-        ticket_id:  params.p_ticket_id,
-        user_id:    session.user.id,
-        comment:    params.p_comment_text,
-        created_at: new Date().toISOString(),
-      };
-      mockStore.ticket_comments.push(comment);
-      return Promise.resolve({ data: comment.id, error: null });
+  async rpc(fnName, params) {
+    const session = _loadSession();
+    try {
+      const response = await fetch(`http://localhost:5000/api/mock/rpc/${fnName}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ params, session })
+      });
+      return await response.json();
+    } catch (err) {
+      return { data: null, error: { message: err.message } };
     }
-    return Promise.resolve({ data: null, error: { message: `RPC "${fnName}" não implementada no mock` } });
   },
 
   auth: {
@@ -355,36 +297,57 @@ export const supabase = {
       return Promise.resolve({ data: { session }, error: null });
     },
 
-    getUser(token) {
-      // token may be passed explicitly (server-side pattern) or omitted
-      const session = token
-        ? { user: mockStore.users.find(u => u.id === token) }
-        : _loadSession();
-      const user = session?.user ?? null;
-      return Promise.resolve({ data: { user }, error: user ? null : { message: 'Token inválido' } });
+    async getUser(token) {
+      const session = token ? null : _loadSession();
+      const userToken = token || session?.access_token;
+      if (!userToken) return { data: { user: null }, error: { message: 'Token inválido' } };
+
+      try {
+        const response = await fetch('http://localhost:5000/api/mock/auth/getUser', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ token: userToken })
+        });
+        return await response.json();
+      } catch (err) {
+        return { data: { user: null }, error: { message: err.message } };
+      }
     },
 
     async signInWithPassword({ email, password }) {
-      const user = mockStore.users.find(u => u.email === email && u.password === password);
-      if (!user) {
-        return { data: { user: null, session: null }, error: { message: 'E-mail ou senha incorretos' } };
+      try {
+        const response = await fetch('http://localhost:5000/api/mock/auth/signIn', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, password })
+        });
+        const result = await response.json();
+        if (result.data?.session) {
+          _saveSession(result.data.session);
+          setTimeout(() => _notify('SIGNED_IN', result.data.session), 0);
+        }
+        return result;
+      } catch (err) {
+        return { data: { user: null, session: null }, error: { message: err.message } };
       }
-      const session = _makeSession(user);
-      _saveSession(session);
-      setTimeout(() => _notify('SIGNED_IN', session), 0);
-      return { data: { user: { id: user.id, email: user.email }, session }, error: null };
     },
 
     async signUp({ email, password }) {
-      if (mockStore.users.find(u => u.email === email)) {
-        return { data: { user: null }, error: { message: 'E-mail já cadastrado' } };
+      try {
+        const response = await fetch('http://localhost:5000/api/mock/auth/signUp', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, password })
+        });
+        const result = await response.json();
+        if (result.data?.session) {
+          _saveSession(result.data.session);
+          setTimeout(() => _notify('SIGNED_IN', result.data.session), 0);
+        }
+        return result;
+      } catch (err) {
+        return { data: { user: null }, error: { message: err.message } };
       }
-      const user = { id: genUUID(), email, role: 'customer', password };
-      mockStore.users.push(user);
-      const session = _makeSession(user);
-      _saveSession(session);
-      setTimeout(() => _notify('SIGNED_IN', session), 0);
-      return { data: { user: { id: user.id, email: user.email } }, error: null };
     },
 
     async signOut() {

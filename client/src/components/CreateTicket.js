@@ -18,7 +18,7 @@ export default function CreateTicket() {
   useEffect(() => {
     async function fetchCategories() {
       try {
-        const response = await fetch('http://localhost:5000/api/tickets/categories');
+        const response = await fetch(`${process.env.REACT_APP_API_URL || 'http://localhost:5000'}/api/tickets/categories`);
         if (!response.ok) throw new Error('Falha ao carregar categorias');
         const data = await response.json();
         setCategories(data);
@@ -51,7 +51,7 @@ export default function CreateTicket() {
       }
 
       // Create ticket
-      const response = await fetch('http://localhost:5000/api/tickets', {
+      const response = await fetch(`${process.env.REACT_APP_API_URL || 'http://localhost:5000'}/api/tickets`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

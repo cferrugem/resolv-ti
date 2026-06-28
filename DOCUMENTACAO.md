@@ -2,7 +2,7 @@
 
 > **Version:** 1.0.0  
 > **Authors:** Cleiton Ferrugem, Lucas Gades  
-> **Stack:** React + Node.js/Express + Supabase (PostgreSQL)  
+> **Stack:** React + Node.js/Express + Prisma (LibSQL/Turso) + Supabase  
 > **Last updated:** March 2026
 
 ---
@@ -80,23 +80,25 @@
 ## 3. Folder Structure
 
 ```
-resolv-ti-master/
+resolv-ti/
 ├── client/                        # React frontend
 │   ├── public/
 │   │   └── logo.png               # Application logo
 │   ├── src/
 │   │   ├── components/            # Reusable components
-│   │   │   ├── Card.js            # Generic card
+│   │   │   ├── ui/                # Base UI primitives (Badge, Button, Card)
 │   │   │   ├── CreateTicket.js    # Ticket creation form
 │   │   │   ├── LoadingSpinner.js  # Loading spinner
 │   │   │   ├── Login.js           # Login form
+│   │   │   ├── Logo.js            # Brand logo component
 │   │   │   ├── NavBar.js          # Navigation bar
 │   │   │   ├── PageContainer.js   # Page layout wrapper
-│   │   │   ├── PageHeader.js      # Section header
 │   │   │   ├── Register.js        # Sign-up form
 │   │   │   ├── RequireAuth.js     # Authenticated route guard
-│   │   │   ├── StatusBadge.js     # Colored status badge
 │   │   │   └── TicketItem.js      # Ticket item in the list
+│   │   ├── hooks/                 # Custom hooks
+│   │   │   ├── useDebounce.js
+│   │   │   └── useTickets.js
 │   │   ├── pages/                 # Main pages
 │   │   │   ├── Dashboard.js       # KPI panel (staff only)
 │   │   │   ├── MyTickets.js       # My tickets (customer only)
@@ -107,23 +109,41 @@ resolv-ti-master/
 │   │   ├── index.js               # React entry point
 │   │   ├── index.css              # Global styles (TailwindCSS input)
 │   │   ├── output.css             # Compiled CSS (TailwindCSS output)
-│   │   └── supabase.js            # Supabase client initialization
-│   ├── .env.local                 # Client environment variables (not committed)
+│   │   ├── supabase.js            # Supabase client initialization
+│   │   └── supabaseMock.js        # Mock Supabase client (mock mode)
+│   ├── .env.example               # Client environment variable reference
 │   ├── package.json
 │   ├── tailwind.config.js
 │   └── postcss.config.js
 │
-├── server/                        # Express backend
+├── server/                        # Express + TypeScript backend
 │   ├── routes/
-│   │   ├── tickets.js             # Ticket routes
-│   │   └── comments.js            # Comment routes
-│   ├── app.js                     # Server entry point
-│   ├── .env                       # Server environment variables (not committed)
+│   │   ├── tickets.ts             # Ticket routes
+│   │   ├── comments.ts            # Comment routes
+│   │   ├── tickets.mock.ts        # Ticket routes (mock mode)
+│   │   ├── comments.mock.ts       # Comment routes (mock mode)
+│   │   └── mock.ts                # Mock route helpers
+│   ├── middleware/
+│   │   ├── auth.ts                # JWT authentication middleware
+│   │   └── ownership.ts           # Resource ownership checks
+│   ├── schemas/
+│   │   └── ticket.schema.ts       # Zod validation schemas
+│   ├── prisma/
+│   │   └── schema.prisma          # Prisma data model
+│   ├── app.ts                     # Server entry point
+│   ├── db.ts                      # Database/Prisma client setup
+│   ├── mockDb.ts                  # In-memory mock database
+│   ├── seed.ts                    # Database seed script
+│   ├── supabaseClient.ts          # Supabase client (server-side)
+│   ├── prisma.config.ts           # Prisma configuration
+│   ├── tsconfig.json
+│   ├── .env.example               # Server environment variable reference
 │   └── package.json
 │
 ├── render.yaml                    # Deploy configuration (Render.com)
 ├── README.md                      # Project executive summary
 ├── DOCUMENTACAO.md                # ← This file
+├── LICENSE                        # ISC License
 └── .gitignore
 ```
 
@@ -143,8 +163,8 @@ resolv-ti-master/
 #### 1. Clone the repository
 
 ```bash
-git clone https://github.com/cferrugem/resolv-.git
-cd resolv-ti-master
+git clone https://github.com/cferrugem/resolv-ti.git
+cd resolv-ti
 ```
 
 #### 2. Configure the server (backend)
@@ -225,7 +245,7 @@ The frontend will be at `http://localhost:3000`.
 
 ## 6. Backend — Node.js Server
 
-### Configuration (`server/app.js`)
+### Configuration (`server/app.ts`)
 
 The server uses **Express 5** with ES modules (`"type": "module"`). The main settings are:
 
@@ -238,10 +258,10 @@ The server uses **Express 5** with ES modules (`"type": "module"`). The main set
 
 | Method | Route | File | Authentication |
 |---|---|---|---|
-| GET | `/api/tickets/categories` | `routes/tickets.js` | No |
-| POST | `/api/tickets` | `routes/tickets.js` | JWT Bearer |
-| PUT | `/api/tickets/:id` | `routes/tickets.js` | JWT Bearer (staff only) |
-| POST | `/api/comments` | `routes/comments.js` | JWT Bearer |
+| GET | `/api/tickets/categories` | `routes/tickets.ts` | No |
+| POST | `/api/tickets` | `routes/tickets.ts` | JWT Bearer |
+| PUT | `/api/tickets/:id` | `routes/tickets.ts` | JWT Bearer (staff only) |
+| POST | `/api/comments` | `routes/comments.ts` | JWT Bearer |
 
 ### Backend authentication pattern
 
@@ -663,7 +683,7 @@ The `render.yaml` file configures two services on [Render.com](https://render.co
 | Issue | Location | Description |
 |---|---|---|
 | Hardcoded backend URL | `Dashboard.js`, `TicketDetails.js`, `TicketList.js` | The `http://localhost:5000` URL is embedded in the code. In production, it should use `REACT_APP_API_URL`. |
-| Open CORS | `server/app.js` | `cors()` with no configuration allows any origin. In production, it should be restricted to the frontend domain. |
+| Open CORS | `server/app.ts` | `cors()` with no configuration allows any origin. In production, it should be restricted to the frontend domain. |
 | NavBar without mobile responsiveness | `NavBar.js` | The navigation menu disappears on small screens (`hidden sm:flex`) without a hamburger menu. |
 
 ### ✅ Improvements Already Implemented

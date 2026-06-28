@@ -4,7 +4,7 @@
 
 **ResolvTI** is a full-stack web application for opening, tracking, and resolving technical support tickets. It centralizes communication between customers and the support team, organizes the workflow by status and priority, and provides a metrics dashboard for the support staff.
 
-> 📚 Built as a portfolio/study project. See [DOCUMENTACAO.md](DOCUMENTACAO.md) for deeper technical details (in Portuguese).
+> 📚 Built as a portfolio/study project. See [DOCUMENTACAO.md](DOCUMENTACAO.md) for deeper technical details.
 
 ---
 

@@ -1,0 +1,47 @@
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["driverAdapters"]
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id               String    @id @default(uuid())
+  email            String    @unique
+  password         String
+  role             String    @default("customer")
+  tickets          Ticket[]  @relation("OwnerTickets")
+  assigned_tickets Ticket[]  @relation("AssignedTickets")
+  comments         Comment[]
+}
+
+model Ticket {
+  id          String    @id @default(uuid())
+  title       String
+  description String
+  status      String    @default("open")
+  priority    String    @default("medium")
+  category    String    @default("outro")
+  user_id     String
+  assigned_to String?
+  created_at  DateTime  @default(now())
+  updated_at  DateTime  @updatedAt
+
+  user           User      @relation("OwnerTickets", fields: [user_id], references: [id])
+  assigned_staff User?     @relation("AssignedTickets", fields: [assigned_to], references: [id])
+  comments       Comment[]
+}
+
+model Comment {
+  id         String   @id @default(uuid())
+  ticket_id  String
+  user_id    String
+  comment    String
+  created_at DateTime @default(now())
+
+  ticket Ticket @relation(fields: [ticket_id], references: [id])
+  user   User   @relation(fields: [user_id], references: [id])
+}

@@ -1,0 +1,35 @@
+{
+  "name": "server",
+  "version": "1.0.0",
+  "description": "ResolvTI - Backend API (Node.js + Express + Supabase)",
+  "main": "app.js",
+  "scripts": {
+    "start": "tsx app.ts",
+    "dev": "nodemon --exec tsx app.ts",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "postinstall": "npx prisma generate"
+  },
+  "keywords": [],
+  "author": "Cleiton Ferrugem, Lucas Gades",
+  "license": "ISC",
+  "type": "module",
+  "dependencies": {
+    "@libsql/client": "^0.5.6",
+    "@prisma/adapter-libsql": "^5.11.0",
+    "@prisma/client": "^5.11.0",
+    "@supabase/supabase-js": "^2.49.4",
+    "cors": "^2.8.5",
+    "dotenv": "^16.5.0",
+    "express": "^5.1.0",
+    "zod": "^4.3.6"
+  },
+  "devDependencies": {
+    "@types/cors": "^2.8.19",
+    "@types/express": "^5.0.6",
+    "@types/node": "^25.6.0",
+    "nodemon": "^3.1.14",
+    "prisma": "^5.11.0",
+    "tsx": "^4.21.0",
+    "typescript": "^6.0.3"
+  }
+}
